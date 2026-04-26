@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "779218772252",
+    "project_id": "nour-fa3fc",
+    "storage_bucket": "nour-fa3fc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:779218772252:android:26293aadaf7292031e5ad9",
+        "android_client_info": {
+          "package_name": "com.example.patientapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAXEC4AO5uJVp1RicQUcY3Ipe1h1yhZdc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

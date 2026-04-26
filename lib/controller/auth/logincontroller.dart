@@ -7,6 +7,7 @@ import '../../core/class/statusrequest.dart';
 import '../../core/constant/routes.dart';
 import '../../core/functions/handling_data_controller.dart';
 import '../../core/functions/show_custom_dialog.dart';
+import '../../core/services/fcm_service.dart';
 import '../../core/services/services.dart';
 import '../../data/datasource/remote/auth/login.dart';
 
@@ -36,9 +37,12 @@ class LoginControllerImp extends LogginController{
     if (formData!.validate()) {
       statusRequest = StatusRequest.loading;
       update();
+      String? fcmToken = await FCMService.getToken();
+
       var response = await loginData.postData(
         email.text,
         password.text,
+        fcmToken, // 👈 أضفناه
 
 
       );

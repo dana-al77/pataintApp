@@ -12,8 +12,8 @@ class CustomTextBodyAuth extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 25),
       child: Text(text,textAlign: TextAlign.center,style: Theme.of(context).textTheme.bodyLarge!.copyWith(
         fontSize: 14, // ← غيّر الرقم لحجم الخط المطلوب
-        color: AppColor.black, // ← غيّر اللون حسب الحاجة (مثلاً AppColor.primaryColor)
-        fontWeight: FontWeight.bold, // (اختياري) تعطي ثقل للخط
+        color: Colors.black54, // ← غيّر اللون حسب الحاجة (مثلاً AppColor.primaryColor)
+        fontWeight: FontWeight.w600// (اختياري) تعطي ثقل للخط
 
       ))
     );

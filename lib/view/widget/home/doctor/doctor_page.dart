@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:patientapp/controller/home_controller.dart';
-
+import '../../../../controller/home/doctor_controller.dart';
 import '../../../../core/constant/color.dart';
 import '../customsearchfield.dart';
 import 'list_doctors_home.dart';
@@ -18,7 +17,7 @@ class DoctorsPage extends StatelessWidget {
         title: const Text("جميع الأطباء" ,style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
       ),
       body: Column(children: [
-        GetBuilder<HomeControllerImp>(
+        GetBuilder<DoctorControllerImp>(
           builder:(controller) {
             return  Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -28,8 +27,9 @@ class DoctorsPage extends StatelessWidget {
                 isSearching: controller.isSearch,
                 onClear: controller.clearSearch,
                 onChanged: (val) {
-                  controller.checkSearch(val);
-                  controller.searchData();
+
+                    controller.onSearchChanged(val);
+
                 },
               ),
             );

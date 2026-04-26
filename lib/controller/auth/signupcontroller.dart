@@ -7,6 +7,7 @@ import '../../core/class/statusrequest.dart';
 import '../../core/constant/routes.dart';
 import '../../core/functions/handling_data_controller.dart';
 import '../../core/functions/show_custom_dialog.dart';
+import '../../core/services/fcm_service.dart';
 import '../../core/services/services.dart';
 import '../../data/datasource/remote/auth/signup.dart';
 
@@ -58,6 +59,8 @@ class SignUpControllerImp extends SignUpController {
     if (formData!.validate()) {
       statusRequest = StatusRequest.loading;
       update();
+      // 🔥 جيب التوكن
+      String? fcmToken = await FCMService.getToken();
 
       var response = await signuptData.postData(
         name.text,
@@ -65,6 +68,7 @@ class SignUpControllerImp extends SignUpController {
         password.text,
         Repassword.text,
         "patient",
+        fcmToken, // 👈 أضفناه
       );
 
       print("==============================response $response");

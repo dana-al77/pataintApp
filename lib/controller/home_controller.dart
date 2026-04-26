@@ -19,12 +19,7 @@ class HomeControllerImp extends HomeController{
   String? name;
   String? id;
 // 🔍 البحث
-  bool isSearch = false;
-  List<MedicalTip> searchList = [];
-  TextEditingController searchController = TextEditingController();
-  /////////////////////////
-  //HomeData homedata =HomeData(Get.find());
-
+   /////////////////////////
 
 
   // List<MedicalTip> tips = [
@@ -65,38 +60,6 @@ class HomeControllerImp extends HomeController{
     await myServices.sharedPreferences.clear();
 
     Get.offAllNamed("/");
-  }
-  //
-  //
-  //
-  void checkSearch(String val) {
-    if (val.isEmpty) {
-      isSearch = false;
-    } else {
-      isSearch = true;
-    }
-    update();
-  }
-
-  void clearSearch() {
-    searchController.clear();
-    isSearch = false;
-    searchList.clear();
-    update();
-  }
-///////////////////////
-  void searchData() {
- /*   String keyword = searchController.text.toLowerCase();
-
-    searchList.clear();
-
-    searchList.addAll(
-      tips.where((tip) =>
-      tip.title?.toLowerCase().contains(keyword) ||
-          tip.content.toLowerCase().contains(keyword)),
-    );*/
-
-    update();
   }
 
   seeAllDoctor () {

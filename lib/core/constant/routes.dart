@@ -17,5 +17,6 @@ class AppRoute {
   static const String AllDoctor = "/alldoctor";
 
   static const String CenterInfo = "/centerinfo";
+  static const String notification = "/notification";
 
 }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:patientapp/core/constant/routes.dart';
+import '../../../controller/notification_controller.dart';
 import '../../../core/constant/color.dart';
 import '../../../controller/home_controller.dart';
-
+import 'package:get/get.dart';
 class CustomHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   final HomeControllerImp controller;
   const CustomHomeAppBar({super.key, required this.controller});
@@ -61,10 +63,49 @@ class CustomHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         Padding(
           padding: const EdgeInsets.only(left: 15),
-          child: IconButton(
-            icon: const Icon(Icons.notification_important_outlined, color: AppColor.secondyColor, size: 30),
-            onPressed: () => controller.logout(),
-          ),
+          child: GetBuilder<NotificationController>(
+            builder: (notifController) => Stack(
+              children: [
+                IconButton(
+                  icon: const Icon(
+                    Icons.notification_important_outlined,
+                    color: AppColor.secondyColor,
+                    size: 30,
+                  ),
+                  onPressed: () {
+                    notifController.reset();
+                    Get.toNamed(AppRoute.notification);
+                  },
+                ),
+
+                // 🔴 البادج (الرقم)
+                if (notifController.unreadCount > 0)
+                  Positioned(
+                    right: 0,
+                    top: 0,
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: const BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                      ),
+                      constraints: const BoxConstraints(
+                        minWidth: 18,
+                        minHeight: 18,
+                      ),
+                      child: Text(
+                        '${notifController.unreadCount}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          )
         ),
       ],
     );

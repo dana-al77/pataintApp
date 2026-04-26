@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -29,99 +31,117 @@ class CustomTextFormAuth extends StatelessWidget {
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.center,
-      child: Container(
-        margin: EdgeInsets.only(bottom: 10),
-        width: MediaQuery.of(context).size.width * 0.9,
-        decoration: BoxDecoration(
-          color: AppColor.backgroundColor,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05), // خفيف كتير (طبي)
-              blurRadius: 15,
-              spreadRadius: 1,
-              offset: Offset(0, 8), // ظل لتحت
-            ),
-          ],
-        ),        child: Material(
-        elevation: 5,
-        shadowColor: AppColor.backgroundColor.withOpacity(0.2),
-        borderRadius: BorderRadius.circular(15),
-        color: Colors.transparent, // لجعل الخلفية تعتمد على الـ TextField
-          child: TextFormField(
-            keyboardType: isNumber
-                ? TextInputType.numberWithOptions(decimal: true)
-                : TextInputType.text,
-            validator: valid,
-          
-            controller: mycontroller,
-            obscureText:
-                obscureText == null || obscureText == false ? false : true,
-            //  readOnly: onTapIcon != null, // إذا في onTapIcon، خليه بس للقراءة
-            onTap: onTapIcon,
-          
-            style: TextStyle(
-                color: Colors.black, fontSize: 14), // ← لون النص المُدخل
-          
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: AppColor.backgroundColor,
-              hintText: hindtext,
-              hintStyle: const TextStyle(fontSize: 15, color: Colors.grey),
-              prefixIconConstraints: BoxConstraints(
-                minWidth: 22,
-                minHeight: 35,
-              ),
-              // التعديل الأهم هنا: auto تجعل النص يرتفع فقط عند التفاعل
-              floatingLabelBehavior: FloatingLabelBehavior.auto,
-          
-              contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-              // الـ Label الذي سيظهر بالأعلى عند الضغط
-              labelText: labeltext,
-              labelStyle: const TextStyle(fontSize: 16, color: AppColor.thirdColor),
-
-              // هنا نضيف prefixText لو موجود
-              prefixText: prefixText != null ? prefixText : null,
-              prefixStyle: const TextStyle(color: Colors.black, fontSize: 14),
-
-              prefixIcon: Padding(
-                padding: const EdgeInsets.only(right:10,),
-                child: Icon(
-                  iconData,
-                  color: AppColor.thirdColor,
-                ),
-              ),
-              suffixIcon: obscureText != null
-                  ? InkWell(
-                onTap: onTapIcon,
-                child: Icon(
-                  obscureText == true
-                      ? Icons.visibility_off
-                      : Icons.visibility,
-                  color: AppColor.thirdColor,
-                ),
-              )
-                  : null,
-              // شكل الحدود الدائرية كما في الصورة
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15), // تقليل القيمة لجعل الزوايا انسيابية
-                borderSide:  BorderSide(color:Colors.blue.shade100.withOpacity(0.5)),
-              ),
-              enabledBorder: OutlineInputBorder(
+        child:ClipRRect(
+          borderRadius: BorderRadius.circular(15),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            child: Container(
+              margin: const EdgeInsets.only(bottom: 12),
+              width: MediaQuery.of(context).size.width * 0.9,
+              decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
-                borderSide: BorderSide(color: Colors.blue.shade100.withOpacity(0.5)),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
-                borderSide: const BorderSide(
-                  color: AppColor.thirdColor,
-                  width: 1.5,
+
+                // 🎨 لون زجاجي
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.white.withOpacity(0.25),
+                    Colors.white.withOpacity(0.5),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
                 ),
+
+                // ✨ بوردر خفيف
+                border: Border.all(
+                  color: Colors.white.withOpacity(0.25),
+                ),
+              ),
+
+
+                child: TextFormField(
+                  keyboardType: isNumber
+                      ? TextInputType.numberWithOptions(decimal: true)
+                      : TextInputType.text,
+                  validator: valid,
+                  controller: mycontroller,
+                  obscureText: obscureText ?? false,
+
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 14,
+                  ),
+
+                  decoration: InputDecoration(
+                    // ❌ مهم جداً
+
+                    filled: false,
+                    fillColor: Colors.transparent,
+
+                    hintText: hindtext,
+                    hintStyle:
+                    const TextStyle(color: Colors.black45),
+
+                    labelText: labeltext,
+                    labelStyle:
+                    const TextStyle(color: Colors.black54,fontSize: 15),
+                    floatingLabelStyle: TextStyle(
+                      color: AppColor.secondyColor,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                    ),
+
+                    prefixText: prefixText,
+                    prefixStyle:
+                    const TextStyle(color: Colors.black),
+
+                    prefixIcon: Padding(
+                    padding: EdgeInsets.only(right: 10),
+                      child: Icon(
+                        iconData,
+                        color: AppColor.secondyColor,
+                      ),
+                    ),
+
+                    prefixIconConstraints: const BoxConstraints(
+                      minWidth: 30,
+                      minHeight: 30,
+                    ),
+                    suffixIcon: obscureText != null
+                        ? InkWell(
+                      onTap: onTapIcon,
+                      child: Icon(
+                        obscureText == true
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                        color: AppColor.thirdColor,
+                      ),
+                    )
+                        : null,
+                    alignLabelWithHint: true,
+                    // 🔥 هذا أهم شي
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide.none, // شفاف
+                    ),
+
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide.none,
+                    ),
+
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide.none,
+                    ),
+
+                    contentPadding: const EdgeInsets.fromLTRB(8, 16, 8, 8),
+
+                  ),
+
               ),
             ),
           ),
-        ),
-      ),
+        )
     );
   }
 }

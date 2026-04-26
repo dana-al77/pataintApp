@@ -14,9 +14,13 @@ class CustomButtonAuth extends StatelessWidget {
       child: Container(
         width: MediaQuery.of(context).size.width * 0.9,
         margin: EdgeInsets.only(top: 10),
+        decoration:BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+
+      ),
         child: MaterialButton(
           shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           padding: EdgeInsets.symmetric(vertical: 13),
           onPressed: onPressed,
           color: AppColor.secondyColor,

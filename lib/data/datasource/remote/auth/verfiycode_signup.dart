@@ -8,11 +8,12 @@ class VerifyCodeSignUpData{
 
   VerifyCodeSignUpData(this.crud);
 
-  postData(String email,String verifycode) async{
+  postData(String email,String verifycode,String? fcmToken) async{
     var response =await crud.PostData(AppLink.verifyCode, {
 
       "email" : email,
       "code" : verifycode,
+      "fcm_token":fcmToken
 
 
     });

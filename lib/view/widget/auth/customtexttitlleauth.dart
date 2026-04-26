@@ -9,8 +9,8 @@ class CustomTextTitleAuth extends StatelessWidget {
   Widget build(BuildContext context) {
     return   Text(text,textAlign: TextAlign.center,style: Theme.of(context).textTheme.headlineLarge!.copyWith(
       fontSize: 18, // ← غيّر الرقم لحجم الخط المطلوب
-      color: AppColor.thirdColor, // ← غيّر اللون حسب الحاجة (مثلاً AppColor.primaryColor)
-      fontWeight: FontWeight.bold, // (اختياري) تعطي ثقل للخط
+      color: Colors.black87, // ← غيّر اللون حسب الحاجة (مثلاً AppColor.primaryColor)
+      fontWeight: FontWeight.w700, // (اختياري) تعطي ثقل للخط
 
     )
 

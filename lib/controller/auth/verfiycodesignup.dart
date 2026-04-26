@@ -7,6 +7,7 @@ import '../../core/constant/color.dart';
 import '../../core/constant/routes.dart';
 import '../../core/functions/handling_data_controller.dart';
 import '../../core/functions/show_custom_dialog.dart';
+import '../../core/services/fcm_service.dart';
 import '../../core/services/services.dart';
 import '../../data/datasource/remote/auth/resendOtp.dart';
 import '../../data/datasource/remote/auth/verfiycode_signup.dart';
@@ -34,7 +35,11 @@ class   VerfiyCodeSignUpcontrollerImp extends VerfiyCodeSignUpcontroller{
   goToSuccessSignUp(VerifyCodeSignUp) async{
     statusRequest = StatusRequest.loading;
     update();
-    var response = await verifyCodeSignUpData.postData(email!,VerifyCodeSignUp
+    String? fcmToken = await FCMService.getToken();
+    var response = await verifyCodeSignUpData.postData(
+        email!,
+        VerifyCodeSignUp,
+        fcmToken,
     );
     print("==============================response $response");
     statusRequest = handlingData(response);

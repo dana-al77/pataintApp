@@ -1,4 +1,5 @@
 import 'package:get/get_navigation/src/routes/get_route.dart';
+import 'package:patientapp/view/screen/NotificationView.dart';
 import 'package:patientapp/view/screen/appiontement/first_appiontement_view.dart';
 import 'package:patientapp/view/screen/auth/complete_profile_view.dart';
 import 'package:patientapp/view/screen/auth/forgetpassword/forgetpassword.dart';
@@ -48,6 +49,7 @@ List<GetPage<dynamic>>? routes = [
   GetPage(name: AppRoute.chat, page: () =>  ChatView()),
   GetPage(name: AppRoute.AllDoctor, page: () =>  DoctorsPage()),
   GetPage(name: AppRoute.CenterInfo, page: () =>  ListCenterInfo()),
+  GetPage(name: AppRoute.notification, page: () =>  Notificationview()),
 
 
 

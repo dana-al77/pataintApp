@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../controller/homescreen_controller.dart';
+import '../../controller/notification_controller.dart';
 import '../../core/constant/color.dart';
 import '../widget/custombottomappbarhome.dart';
 
@@ -10,6 +11,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put(HomeScreenControllerImp());
+    Get.put(NotificationController());
     return GetBuilder<HomeScreenControllerImp>(
       builder: (controller) => Scaffold(
         backgroundColor: AppColor.white,
