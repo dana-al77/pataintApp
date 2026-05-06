@@ -12,6 +12,8 @@ import 'package:patientapp/view/screen/chat/chat_view.dart';
 import 'package:patientapp/view/screen/home.dart';
 import 'package:patientapp/view/screen/homescreen.dart';
 import 'package:patientapp/view/screen/onboarding.dart';
+import 'package:patientapp/view/screen/profile/profile_page.dart';
+import 'package:patientapp/view/screen/upload_medical.dart';
 import 'package:patientapp/view/widget/home/centerInfo/list_center_info.dart';
 import 'package:patientapp/view/widget/home/doctor/doctor_page.dart';
 
@@ -50,7 +52,9 @@ List<GetPage<dynamic>>? routes = [
   GetPage(name: AppRoute.AllDoctor, page: () =>  DoctorsPage()),
   GetPage(name: AppRoute.CenterInfo, page: () =>  ListCenterInfo()),
   GetPage(name: AppRoute.notification, page: () =>  Notificationview()),
+  GetPage(name: AppRoute.getProfile, page: () =>  ProfilePage()),
 
+  GetPage(name: AppRoute.upLoadMedical, page: () =>  UploadMedical()),
 
 
 ];

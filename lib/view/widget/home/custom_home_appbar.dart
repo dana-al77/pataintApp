@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:patientapp/core/constant/routes.dart';
 import '../../../controller/notification_controller.dart';
@@ -25,10 +27,25 @@ class CustomHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
             // 1. صورة البروفايل
             CircleAvatar(
               radius: 28,
-              backgroundColor: Colors.teal.withOpacity(0.1), // لون خفيف خلف الصورة
-              backgroundImage: const AssetImage('assets/images/doctor.jpg'), // تأكد من المسار
+              backgroundColor: Colors.teal.withOpacity(0.1),
+              backgroundImage: controller.imagePath != null
+                  ? FileImage(File(controller.imagePath!))
+                  : null,
+              child: controller.imagePath == null
+                  ? Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.white.withOpacity(0.3),
+                      Colors.white.withOpacity(0.1),
+                    ],
+                  ),
+                ),
+                child: const Icon(Icons.person, size: 30),
+              )
+                  : null,
             ),
-
             const SizedBox(width: 15), // مسافة بين الصورة والكلام
 
             // 2. النصوص

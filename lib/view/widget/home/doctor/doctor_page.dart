@@ -35,7 +35,7 @@ class DoctorsPage extends StatelessWidget {
             );
           },
         ),
-        const ListDoctorsHome()]),
+        Expanded(child: const ListDoctorsHome())]),
     );
   }
 }

@@ -1,6 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:image_picker/image_picker.dart';
 import '../../core/class/statusrequest.dart';
 import '../../core/constant/routes.dart';
 import '../../core/functions/handling_data_controller.dart';
@@ -27,8 +29,17 @@ class CompleteProfileControllerImp extends CompleteProfileController {
   late CompleteProfileData completeProfileData;
 
   MyServices myServices = Get.find();
+  File? imageFile;
+  Future<void> chooseImage() async {
+    final picked = await ImagePicker().pickImage(source: ImageSource.gallery);
 
+    if (picked != null) {
+      imageFile = File(picked.path);
+      myServices.sharedPreferences.setString("profile_image", picked.path);
+    }
 
+    update();
+  }
   @override
   completeProfile() async {
     var formData = formstate.currentState;
@@ -43,6 +54,7 @@ class CompleteProfileControllerImp extends CompleteProfileController {
         emergencyContact: emergencyContact.text,
         gender: selectedGender == "ذكر" ? "male" : "female",
         phone: phone.text,
+        imageFile: imageFile,
       );
 
       print("===== Complete Profile Response: $response");

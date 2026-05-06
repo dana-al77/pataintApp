@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../data/datasource/remote/appiontement/firstly_appiontement.dart';
 import '../../core/class/statusrequest.dart';
 import '../../core/functions/handling_data_controller.dart';
 import '../../core/functions/show_custom_dialog.dart';
+import '../../data/datasource/remote/paymera/payment_status.dart';
+import '../../view/screen/payment/payment_view.dart';
 
 
 
@@ -29,7 +32,9 @@ class FistAppiontController extends GetxController {
   StatusRequest statusRequest = StatusRequest.none;
 
   FistAppiontData medicalRecordData = FistAppiontData(Get.find());
+  PaymentStatusData paymentStatusData = PaymentStatusData(Get.find());
 
+  String? paymentId;
   bool isSmoker = false;
   bool get isLastStep => currentStep == 3;
   bool isStepCurrent(int index) => currentStep == index;
@@ -40,14 +45,34 @@ class FistAppiontController extends GetxController {
     if (isLastStep) {
       await submitRecord(
         doctorId: "1",
-        date: "2026-04-12",
-        startTime: "09:30",
-        endTime: "09:45",
+        date: "2026-05-05",
+        startTime: "10:00",
+        endTime: "10:15",
       );
     } else {
       nextStep();
     }
   }
+  // Future<void> openPaymentUrl(String url) async {
+  //   final Uri uri = Uri.parse(url);
+  //
+  //   if (!await launchUrl(
+  //     uri,
+  //     mode: LaunchMode.externalApplication,
+  //   )) {
+  //     Get.snackbar("خطأ", "تعذر فتح صفحة الدفع");
+  //   }
+  // }
+  Future<void> openPaymentUrl(String url) async {
+    Get.to(() => PaymentWebView(
+      url: url,
+      paymentId: paymentId!,
+      onFinish: () {
+        startPaymentPolling();
+      },
+    ));
+  }
+
   List<Widget> reviewData() {
     return [
       Text("الطول: ${height.text}"),
@@ -91,6 +116,7 @@ class FistAppiontController extends GetxController {
     familyHistory = TextEditingController();
     bloodPressure = TextEditingController();
     super.onInit();
+
   }
 
   void nextStep() {
@@ -137,6 +163,58 @@ class FistAppiontController extends GetxController {
     currentStep = stepIndex; // تعيين الخطوة المستهدفة
     update(); // تحديث الواجهة ليقوم الـ AnimatedSwitcher بتغيير الودجت
   }
+  Future<void> startPaymentPolling() async {
+    if (paymentId == null) return;
+
+    int attempts = 0;
+
+    while (attempts < 20) {
+      await Future.delayed(Duration(seconds: 5));
+
+      var response = await paymentStatusData.getStatus(paymentId!);
+
+      print("💰 STATUS: $response");
+
+      // 🔥 مهم جداً
+      if (response is StatusRequest) {
+        print("❌ API ERROR");
+        attempts++;
+        continue;
+      }
+
+      if (response['success'] == true) {
+        String status = response['data']['status'];
+
+        if (status == "A") {
+          showCustomDialog(
+            title: "تم الدفع",
+            message: "تم تأكيد الحجز بنجاح",
+            icon: Icons.check_circle,
+            iconColor: Colors.green,
+            buttonText: "حسنا",
+          );
+          return;
+        }
+
+        if (status == "F") {
+          showCustomDialog(
+            title: "فشل الدفع",
+            message: "لم يتم الدفع",
+            icon: Icons.error,
+            iconColor: Colors.red,
+            buttonText: "حسنا",
+          );
+          return;
+        }
+      }
+
+      attempts++;
+    }
+
+    Get.snackbar("تنبيه", "انتهت مهلة التحقق من الدفع");
+  }
+
+
   submitRecord({
     required String doctorId,
     required String date,
@@ -162,7 +240,7 @@ class FistAppiontController extends GetxController {
         doctorId: doctorId,
         date: date,
         startTime: startTime,
-        endTime: endTime,
+        endTime: endTime, amount: '1000',
       );
 
       isLoading = false;
@@ -174,28 +252,73 @@ class FistAppiontController extends GetxController {
       String formatTime(String time) {
         return time.substring(0, 5);
       }
+
       if (response['success'] == true) {
-        Future.delayed(Duration(milliseconds: 100), () {
-          showCustomDialog(
-            title: "تم تأكيد الحجز",
-            message:
-            "📅 التاريخ: ${formatDate(date)}\n"
-                "⏰ من ${formatTime(startTime)} إلى ${formatTime(endTime)}",
-            icon: Icons.check_circle,
-            iconColor: Colors.green,
-            buttonText: "حسنا",
-          );
-        });
-      }else {
+        final paymentUrl = response['data']['payment_url'];
+         paymentId = response['data']['payment_id'];
+
+        // 👇 خزّنه
+        this.paymentId = paymentId;
+        showCustomDialog(
+          title: "تم الحجز",
+          message: "يرجى إتمام الدفع لتأكيد الموعد",
+          icon: Icons.payment,
+          iconColor: Colors.orange,
+          buttonText: "الدفع الآن",
+          onPressed: () async {
+            await openPaymentUrl(paymentUrl);
+
+            // 👇 بعد الرجوع نتحقق
+            startPaymentPolling();
+          },
+
+        );
+      } else {
+        // 👇 نحدد الرسالة الصح
+        String errorMessage = "";
+
+        if (response['error'] != null && response['error'].toString().isNotEmpty) {
+          errorMessage = response['error'];
+        } else if (response['message'] != null &&
+            response['message'].toString().isNotEmpty) {
+          errorMessage = response['message'].toString();
+        } else {
+          errorMessage = "حدث خطأ غير معروف";
+        }
+
         showCustomDialog(
           title: "فشل الحجز",
-          message:"لا يوجد مواعيد متاحة حاليا",
-          icon: Icons.wifi_tethering_error,
+          message: errorMessage,
+          icon: Icons.error,
           iconColor: Colors.red,
           buttonText: "حسنا",
         );
-      //  Get.snackbar("فشل", "لا يوجد مواعيد متاحة حالياً");
       }
+      print("🔥 RESPONSE: $response");
+      // if (response['success'] == true) {
+      //   final paymentUrl = response['data']['payment_url'];
+      //
+      //   showCustomDialog(
+      //     title: "تم الحجز",
+      //     message: "يرجى إتمام الدفع لتأكيد الموعد",
+      //     icon: Icons.payment,
+      //     iconColor: Colors.orange,
+      //     buttonText: "الدفع الآن",
+      //     onPressed: () {
+      //       openPaymentUrl(paymentUrl);
+      //     },
+      //   );
+      // }
+      // else {
+      //   showCustomDialog(
+      //     title: "فشل الحجز",
+      //     message:"لا يوجد مواعيد متاحة حاليا",
+      //     icon: Icons.wifi_tethering_error,
+      //     iconColor: Colors.red,
+      //     buttonText: "حسنا",
+      //   );
+      // //  Get.snackbar("فشل", "لا يوجد مواعيد متاحة حالياً");
+      // }
     } catch (e) {
       isLoading = false;
       update();

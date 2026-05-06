@@ -23,6 +23,7 @@ class FistAppiontData {
     required String date,
     required String startTime,
     required String endTime,
+    required String amount,
   }) async {
     var response = await crud.PostDataWithToken(
       AppLink.firstAppiont,
@@ -38,7 +39,7 @@ class FistAppiontData {
         "surgeries": surgeries,
         "family_history": familyHistory,
         "blood_pressure": bloodPressure,
-
+        "amount": amount,
 
         "doctor_id": doctorId,
         "date": date,

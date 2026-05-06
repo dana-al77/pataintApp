@@ -6,6 +6,7 @@ import '../view/screen/NotificationView.dart';
 import '../view/screen/appiontement/first_appiontement_view.dart';
 import '../view/screen/home.dart';
 import '../view/screen/profile.dart';
+import '../view/screen/profile/profile_page.dart';
 import '../view/widget/home/centerInfo/list_center_info.dart';
 
 
@@ -20,7 +21,7 @@ class HomeScreenControllerImp extends HomeScreenController {
      const Home(),
     ListCenterInfo(),
     FirstAppiontementView(),
-    Profile(),
+    ProfilePage(),
 
   ];
 

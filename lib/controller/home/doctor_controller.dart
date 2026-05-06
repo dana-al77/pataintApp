@@ -24,7 +24,8 @@ class DoctorControllerImp extends DoctorController {
   SearchDoctorsData searchDoctorsData = SearchDoctorsData(Get.find());
 
   bool isSearch = false;
-  List doctorsSearchList = [];
+ // List doctorsSearchList = [];
+  List<DoctorModel> doctorsSearchList = [];
   Timer? debounce;
 
   checkSearch(String val) {
@@ -69,7 +70,15 @@ class DoctorControllerImp extends DoctorController {
 
     if (StatusRequest.success == statusRequest) {
       if (response['success'] == true) {
-        doctorsSearchList = response['data'];
+
+        doctorsSearchList.clear();
+
+        List list = response['data'];
+
+        doctorsSearchList.addAll(
+          list.map((e) => DoctorModel.fromJson(e)),
+        );
+
       } else {
         doctorsSearchList.clear();
         statusRequest = StatusRequest.failure;
@@ -78,7 +87,6 @@ class DoctorControllerImp extends DoctorController {
 
     update();
   }
-
   @override
   getDoctors() async {
     data.clear();

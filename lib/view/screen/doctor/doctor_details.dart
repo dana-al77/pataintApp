@@ -10,6 +10,7 @@ import '../../../core/constant/imageasset.dart';
 import '../../../data/model/doctor.dart';
 import '../../widget/home/doctor/details/doctor_stats.dart';
 import '../../widget/home/doctor/details/header.dart';
+import '../review_view.dart';
 import 'bio.dart';
 import 'booking_button.dart';
 class DoctorDetailsPage extends StatefulWidget {
@@ -63,6 +64,16 @@ class _DoctorDetailsPageState extends State<DoctorDetailsPage> {
 
                 DoctorStats(doctor: widget.doctor),
                 const SizedBox(height: 5),
+                ElevatedButton(
+                  onPressed: () {
+                    Get.dialog(
+                      ReviewDialog(
+                        doctorId: widget.doctor.doctorId!.toString(),
+                      ),
+                    );
+                  },
+                  child: const Text("قيّم الطبيب"),
+                ),
                 DoctorBio(bio: widget.doctor.bio),
                 const SizedBox(height: 5),
 

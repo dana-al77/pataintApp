@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../../controller/homescreen_controller.dart';
 import '../../controller/notification_controller.dart';
 import '../../core/constant/color.dart';
+import '../../core/functions/alertexitapp.dart';
 import '../widget/custombottomappbarhome.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -13,12 +14,15 @@ class HomeScreen extends StatelessWidget {
     Get.put(HomeScreenControllerImp());
     Get.put(NotificationController());
     return GetBuilder<HomeScreenControllerImp>(
-      builder: (controller) => Scaffold(
-        backgroundColor: AppColor.white,
-        extendBody: true,
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        bottomNavigationBar: const CustomBottomAppBarHome(),
-        body: controller.listPage[controller.currentpage],
+      builder: (controller) => WillPopScope(
+        onWillPop: alertExitApp,
+        child: Scaffold(
+          backgroundColor: AppColor.white,
+          extendBody: true,
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+          bottomNavigationBar: const CustomBottomAppBarHome(),
+          body: controller.listPage[controller.currentpage],
+        ),
       ),
     );
   }

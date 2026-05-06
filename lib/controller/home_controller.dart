@@ -19,27 +19,7 @@ class HomeControllerImp extends HomeController{
   String? name;
   String? id;
 // 🔍 البحث
-   /////////////////////////
-
-
-  // List<MedicalTip> tips = [
-  //   MedicalTip(
-  //     title: "اشرب الماء بكثرة",
-  //     content: "يساعد شرب الماء على تحسين الدورة الدموية.",
-  //     createdBy: "أحمد",
-  //   ),
-  //   MedicalTip(
-  //     title: "نوم كافي",
-  //     content: "الحصول على نوم كافي يحسن الصحة النفسية.",
-  //     createdBy: "سارة",
-  //   ),
-  //   MedicalTip(
-  //     title: "نوم كافي",
-  //     content: "الحصول على نوم كافي يحسن الصحة النفسية.",
-  //     createdBy: "سارة",
-  //   ),
-  // ];
-  // داخل HomeControllerImp
+  String? imagePath;
   List doctors = [
     // مثال لبيانات تجريبية، يفضل استخدام Model لاحقاً
     {
@@ -75,7 +55,9 @@ class HomeControllerImp extends HomeController{
   @override
   void onInit() {
     super.onInit();
-
+    imagePath = Get.find<MyServices>()
+        .sharedPreferences
+        .getString("profile_image");
     initialData();
 
   }

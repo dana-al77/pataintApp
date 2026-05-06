@@ -19,4 +19,9 @@ class AppRoute {
   static const String CenterInfo = "/centerinfo";
   static const String notification = "/notification";
 
+  static const String getProfile = "/getProfile";
+  static const String upLoadMedical = "/uploadmedical";
+
+
+
 }

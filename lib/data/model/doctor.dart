@@ -63,7 +63,8 @@ class DoctorModel {
     email = json['email'];
     phone = json['phone'];
     specialization = json['specialization'];
-    experienceYears = json['experience_years'];
+   // experienceYears = json['experience_years'];
+    experienceYears = json['years_of_experience'];
     bio = json['bio'];
     price = json['price'] != null ? json['price'].toDouble() : null;
     image = json['image'];

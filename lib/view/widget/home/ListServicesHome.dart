@@ -28,7 +28,9 @@ class ListServicesHome extends StatelessWidget {
                 icon: Icons.upload_file,
                 backgroundColor: Colors.orange,
                 iconColor: Colors.orange,
-                onTap: () {},
+                onTap: () {
+                  controller.goToUpLoad();
+                },
               ),
               CustomServiceItem(
                 title: "الجلسات",

@@ -11,7 +11,7 @@ import '../../data/model/support_model.dart';
 
 abstract class servicesController extends GetxController {
   goToFirstAppiont();
-
+  goToUpLoad();
 
 }
 
@@ -20,7 +20,9 @@ class servicesControllerImp extends servicesController {
   goToFirstAppiont(){
     Get.toNamed(AppRoute.firstAppiont);
   }
-
+  goToUpLoad(){
+    Get.toNamed(AppRoute.upLoadMedical);
+ }
 
 
 
