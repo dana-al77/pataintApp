@@ -24,83 +24,182 @@ class MedicalTestController extends GetxController {
 
   MyServices myServices = Get.find();
 
-  // /// 📂 اختيار ملف (صورة أو ملف)
+
+  String? fileName;
+  List<PlatformFile> selectedFiles = [];
+  // 1️⃣ تحويل المتغير إلى قائمة ملفات
+  //List<File> selectedFiles = [];
+  // 2️⃣ قائمة لتخزين نسب التحميل لكل ملف (اختياري حسب منطق الرفع لديك)
+  Map<int, double> filesProgress = {};
+  String formatFileSize(int bytes) {
+    if (bytes < 1024) {
+      return '$bytes B';
+    } else if (bytes < 1024 * 1024) {
+      return '${(bytes / 1024).toStringAsFixed(1)} KB';
+    } else {
+      return '${(bytes / (1024 * 1024)).toStringAsFixed(1)} MB';
+    }
+  }
   // Future<void> chooseFile() async {
-  //   final picked = await ImagePicker().pickImage(source: ImageSource.gallery);
+  //   FilePickerResult? result = await FilePicker.pickFiles(
+  //     type: FileType.custom,
+  //     allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx'],
+  //   );
   //
-  //   if (picked != null) {
-  //     file = File(picked.path);
+  //   if (result != null && result.files.single.path != null) {
+  //     file = File(result.files.single.path!);
+  //     fileName = result.files.single.name;
+  //     // --- محاكاة التحميل ---
+  //     uploadProgress = 0;
+  //     update();
+  //
+  //     // أنيميشن بسيط لجعل الشريط يزحف لـ 100%
+  //     for (int i = 0; i <= 10; i++) {
+  //       await Future.delayed(const Duration(milliseconds: 200));
+  //       uploadProgress = i / 10; // تزداد من 0.1 إلى 1.0
+  //       update();
+  //     }
   //   }
   //
   //   update();
   // }
-  String? fileName;
-
   Future<void> chooseFile() async {
     FilePickerResult? result = await FilePicker.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx'],
+      allowMultiple: true,
     );
 
-    if (result != null && result.files.single.path != null) {
-      file = File(result.files.single.path!);
-      fileName = result.files.single.name;
-      // --- محاكاة التحميل ---
-      uploadProgress = 0;
-      update();
+    if (result != null) {
+      for (var pickedFile in result.files) {
 
-      // أنيميشن بسيط لجعل الشريط يزحف لـ 100%
-      for (int i = 0; i <= 10; i++) {
-        await Future.delayed(const Duration(milliseconds: 200));
-        uploadProgress = i / 10; // تزداد من 0.1 إلى 1.0
-        update();
+        selectedFiles.add(pickedFile);
+
+        int currentIndex = selectedFiles.length - 1;
+
+        _startIndividualUploadSimulation(currentIndex);
       }
-    }
 
+      update();
+    }
+  }
+  // Future<void> chooseFile() async {
+  //   // استخدام FilePicker لاختيار ملف واحد أو أكثر
+  //   FilePickerResult? result = await FilePicker.pickFiles(
+  //     type: FileType.custom,
+  //     allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx'],
+  //     allowMultiple: true, // تفعيل اختيار أكثر من ملف في المرة الواحدة
+  //   );
+  //
+  //   if (result != null) {
+  //     for (var pickedFile in result.files) {
+  //       if (pickedFile.path != null) {
+  //         File newFile = File(pickedFile.path!);
+  //
+  //         // إضافة الملف للقائمة بدلاً من استبداله
+  //         selectedFiles.add(newFile);
+  //
+  //         // الحصول على مكان الملف الحالي في القائمة للتحكم بنسبة تحميله
+  //         int currentIndex = selectedFiles.length - 1;
+  //
+  //         // بدء محاكاة التحميل لهذا الملف تحديداً
+  //         _startIndividualUploadSimulation(currentIndex);
+  //       }
+  //     }
+  //     update(); // تحديث الواجهة لإظهار الملفات الجديدة فوراً
+  //   }
+  // }
+
+  // دالة منفصلة لإدارة أنيميشن التحميل لكل ملف على حدة
+  void _startIndividualUploadSimulation(int index) async {
+    filesProgress[index] = 0.0;
     update();
+
+    for (int i = 0; i <= 10; i++) {
+      await Future.delayed(const Duration(milliseconds: 150));
+      filesProgress[index] = i / 10;
+      update(); // تحديث الواجهة لرؤية تقدم الشريط الأخضر
+    }
   }
 
+  // دالة إضافية لمسح ملف من القائمة
+  void removeFile(int index) {
+    selectedFiles.removeAt(index);
+    filesProgress.remove(index); // مسح نسبة التحميل الخاصة به
+    update();
+  }
+  IconData getFileIcon(String extension) {
+    switch (extension.toLowerCase()) {
+
+      case 'pdf':
+        return Icons.picture_as_pdf;
+
+      case 'jpg':
+      case 'jpeg':
+      case 'png':
+        return Icons.image;
+
+      case 'doc':
+      case 'docx':
+        return Icons.description;
+
+      default:
+        return Icons.insert_drive_file;
+    }
+  }
   /// 🚀 رفع التحليل
   uploadTest() async {
     var formData = formstate.currentState;
 
     if (formData!.validate()) {
-      if (file == null) {
+      if (selectedFiles.isEmpty) {
         Get.snackbar("تنبيه", "اختر ملف أولاً");
         return;
       }
 
-      statusRequest = StatusRequest.loading;
-      update();
+      try {
+        statusRequest = StatusRequest.loading;
+        update();
 
-      var response = await medicalTestData.postData(
-        testType: testType.text,
-        notes: notes.text,
-        file: file!,
-      );
+        var response = await medicalTestData.postData(
+          testType: testType.text,
+          notes: notes.text,
+         // files: selectedFiles,
+          files: selectedFiles
+              .where((e) => e.path != null)
+              .map((e) => File(e.path!))
+              .toList(),
+        );
 
-      print("===== Upload Test Response: $response");
+        print("===== Upload Test Response: $response");
 
-      statusRequest = handlingData(response);
+        statusRequest = handlingData(response);
 
-      if (statusRequest == StatusRequest.success) {
-        if (response['status'] == true) {
+        if (statusRequest == StatusRequest.success) {
+          if (response['status'] == true) {
+            Get.snackbar("نجاح", "تم رفع التحليل");
+            selectedFiles.clear();
+            filesProgress.clear();
+            testType.clear();
+            notes.clear();
 
-          Get.snackbar("نجاح", "تم رفع التحليل");
-
-        } else {
-          Get.defaultDialog(
-            title: "Error",
-            middleText: response['message'] ?? "Upload failed",
-          );
-          statusRequest = StatusRequest.failure;
+          } else {
+            Get.defaultDialog(
+              title: "Error",
+              middleText: response['message'] ?? "Upload failed",
+            );
+            statusRequest = StatusRequest.failure;
+          }
         }
+      } catch (e) {
+        // هنا سيطبع لك أي خطأ يحدث حتى لو السيرفر مطفأ تماماً
+        print("❌ حدث خطأ غير متوقع: $e");
+        statusRequest = StatusRequest.serverfailure;
       }
 
       update();
     }
   }
-
 
 
   @override

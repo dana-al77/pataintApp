@@ -23,7 +23,7 @@ import 'core/middleware/my_middleware.dart';
 List<GetPage<dynamic>>? routes = [
   GetPage(
       name: "/", page: () => const Onboarding()
-      , middlewares: [MyMiddeeWare()]
+     , middlewares: [MyMiddeeWare()]
   ),
   // onBoearding
 

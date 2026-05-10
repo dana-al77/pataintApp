@@ -10,6 +10,7 @@ class BookingData {
     required int doctorId,
     required String date,
     required String startTime,
+    required String amount,
   }) async {
     var response = await crud.PostDataWithToken(
       AppLink.bookAppointment,
@@ -17,6 +18,7 @@ class BookingData {
         "doctor_id": doctorId.toString(),
         "date": date,
         "start_time": startTime,
+        "amount": amount,
       },
     );
 

@@ -39,16 +39,25 @@ class FistAppiontController extends GetxController {
   bool get isLastStep => currentStep == 3;
   bool isStepCurrent(int index) => currentStep == index;
   bool isStepDone(int index) => currentStep > index;
+  // void handleNextOrSubmit() async {
+  //   if (!validateStep()) return;
+  //
+  //   if (isLastStep) {
+  //     await submitRecord(
+  //       doctorId: "1",
+  //       date: "2026-05-05",
+  //       startTime: "10:00",
+  //       endTime: "10:15",
+  //     );
+  //   } else {
+  //     nextStep();
+  //   }
+  // }
   void handleNextOrSubmit() async {
     if (!validateStep()) return;
 
     if (isLastStep) {
-      await submitRecord(
-        doctorId: "1",
-        date: "2026-05-05",
-        startTime: "10:00",
-        endTime: "10:15",
-      );
+      await submitRecord();
     } else {
       nextStep();
     }
@@ -118,7 +127,18 @@ class FistAppiontController extends GetxController {
     super.onInit();
 
   }
-
+  String paymentStatusText(String status) {
+    switch (status) {
+      case "A":
+        return "تم قبول الدفع";
+      case "P":
+        return "قيد المعالجة";
+      case "F":
+        return "فشل الدفع";
+      default:
+        return "حالة غير معروفة";
+    }
+  }
   void nextStep() {
     if (currentStep < 3) {
       currentStep++;
@@ -184,22 +204,32 @@ class FistAppiontController extends GetxController {
 
       if (response['success'] == true) {
         String status = response['data']['status'];
+        String amount = response['data']['amount'].toString();
+
+        String statusText = paymentStatusText(status);
 
         if (status == "A") {
+          // 👇 سكر صفحة الدفع
+          Get.back();
           showCustomDialog(
-            title: "تم الدفع",
-            message: "تم تأكيد الحجز بنجاح",
+            title: "تم تأكيد الدفع",
+            message:
+            "✅ الحالة: $statusText\n"
+                "💳 المبلغ المدفوع: $amount ل.س",
             icon: Icons.check_circle,
             iconColor: Colors.green,
             buttonText: "حسنا",
           );
+
           return;
         }
 
         if (status == "F") {
+          Get.back();
           showCustomDialog(
             title: "فشل الدفع",
-            message: "لم يتم الدفع",
+            message:
+            "❌ الحالة: ${paymentStatusText(status)}",
             icon: Icons.error,
             iconColor: Colors.red,
             buttonText: "حسنا",
@@ -215,12 +245,7 @@ class FistAppiontController extends GetxController {
   }
 
 
-  submitRecord({
-    required String doctorId,
-    required String date,
-    required String startTime,
-    required String endTime,
-  }) async {
+  submitRecord() async {
     try {
       isLoading = true;
       update();
@@ -237,10 +262,11 @@ class FistAppiontController extends GetxController {
         surgeries: surgeries.text,
         familyHistory: familyHistory.text,
         bloodPressure: bloodPressure.text,
-        doctorId: doctorId,
-        date: date,
-        startTime: startTime,
-        endTime: endTime, amount: '1000',
+        // doctorId: doctorId,
+        // date: date,
+        // startTime: startTime,
+        // endTime: endTime,
+        amount: '1000',
       );
 
       isLoading = false;
@@ -259,19 +285,40 @@ class FistAppiontController extends GetxController {
 
         // 👇 خزّنه
         this.paymentId = paymentId;
+        // 👇 بيانات الموعد
+        final appointment = response['data']['appointment'];
+
+        final date = appointment['date'];
+        final startTime = appointment['start_time'];
+        final endTime = appointment['end_time'];
+
+        // showCustomDialog(
+        //   title: "تم الحجز",
+        //   message: "يرجى إتمام الدفع لتأكيد الموعد",
+        //   icon: Icons.payment,
+        //   iconColor: Colors.orange,
+        //   buttonText: "الدفع الآن",
+        //   onPressed: () async {
+        //     await openPaymentUrl(paymentUrl);
+        //
+        //     // 👇 بعد الرجوع نتحقق
+        //     startPaymentPolling();
+        //   },
+        //
+        // );
         showCustomDialog(
           title: "تم الحجز",
-          message: "يرجى إتمام الدفع لتأكيد الموعد",
+          message:
+          "📅 التاريخ: $date\n"
+              "⏰ الوقت: من $startTime إلى $endTime\n\n"
+              "يرجى إتمام الدفع لتأكيد الموعد",
           icon: Icons.payment,
           iconColor: Colors.orange,
           buttonText: "الدفع الآن",
           onPressed: () async {
             await openPaymentUrl(paymentUrl);
-
-            // 👇 بعد الرجوع نتحقق
             startPaymentPolling();
           },
-
         );
       } else {
         // 👇 نحدد الرسالة الصح

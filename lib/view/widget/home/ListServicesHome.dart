@@ -44,7 +44,9 @@ class ListServicesHome extends StatelessWidget {
                 icon: Icons.calendar_month_outlined,
                 backgroundColor: Colors.teal,
                 iconColor: Colors.teal,
-                onTap: () {},
+                onTap: () {
+                  controller.goToFirstAppiont();
+                },
               ),
             ],
           )

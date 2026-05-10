@@ -1,6 +1,6 @@
 class AppLink {
   // static const String server = "https://05ee-185-107-80-121.ngrok-free.app/";
-  static const String server = "https://029e-193-43-149-3.ngrok-free.app/";
+  static const String server = "https://66ba-185-184-192-239.ngrok-free.app/";
   // static const String server = "http://192.168.1.109:8000/";
 
   static const String test = "$server";
@@ -31,6 +31,9 @@ class AppLink {
   static const String firstAppiont = "${server}api/medical-record";
   static const String availableAppointments = "${server}api/getAvailableAppointments";
   static const String bookAppointment = "${server}api/book-appointment";
+  static const String paymentStatus = "${server}api/payment/status";
+  static const String myAppointments = "${server}api/myAppointments";
+  static const String cancelPayment = "${server}api/payment/cancel";
 
 ///////////////  search
   static const String searchDoctorspec = "${server}api/getDoctorsWithSpecialization";
@@ -39,8 +42,6 @@ class AppLink {
   //////////// profile
   static const String profile = "${server}api/patient/profile";
   static const String showprofile = "${server}api/showProfile";
-
-  static const String paymentStatus = "https://egate-t.paymera.cc/api/get-payment-status";
 
 
   static const String upLoadMedical = "${server}api/uploadMedicalTest";

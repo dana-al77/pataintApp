@@ -1,0 +1,170 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../../../../controller/appiontement/my_appointments_controller.dart';
+import '../../../../core/class/handling_data_view.dart';
+import '../../../../core/constant/color.dart';
+import '../../../widget/appiontement/my-appiontement/appointment_card.dart';
+
+
+class MyAppointmentsView extends StatelessWidget {
+
+  const MyAppointmentsView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+
+    Get.put(MyAppointmentsController());
+
+    return Scaffold(
+
+      backgroundColor: AppColor.backgroundColor,
+
+      appBar: AppBar(
+        backgroundColor: AppColor.backgroundColor,
+        elevation: 0,
+        title: const Text(
+          "حجوزاتي",
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+        ),
+        centerTitle: true,
+      ),
+
+      body: GetBuilder<MyAppointmentsController>(
+        builder: (controller) {
+      return handlingDataView(
+        statusRequest: controller.statusRequest,
+        widget: Column(
+          children: [
+            // شريط التبويبات بستايل الإطار الموحد
+            Container(
+              height: 55, // ارتفاع الشريط
+              margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+              decoration: BoxDecoration(
+                color: Colors.white, // الإطار الخارجي أبيض
+                borderRadius: BorderRadius.circular(50),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.03),
+                    blurRadius: 10,
+                    offset: const Offset(0, 5),
+                  )
+                ],
+              ),
+              child: Row(
+                children: [
+                  Expanded(child: customTab(controller, 0, "القادمة")),
+                  Expanded(child: customTab(controller, 1, "المكتملة")),
+                  Expanded(child: customTab(controller, 2, "الملغية")),
+                ],
+              ),
+            ),
+            // --- شريط التبويبات العلوي ---
+            // Container(
+            //   padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+            //     children: [
+            //       customTab(controller, 0, "القادمة"),
+            //       customTab(controller, 1, "المكتملة"),
+            //       customTab(controller, 2, "الملغية"),
+            //     ],
+            //   ),
+            // ),
+
+            // --- قائمة الحجوزات المتحركة ---
+            Expanded(
+              child: controller.currentList.isEmpty
+                  ? const Center(child: Text("لا توجد حجوزات هنا"))
+                  : ListView.builder(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                itemCount: controller.currentList.length,
+                itemBuilder: (context, index) {
+                  var item = controller.currentList[index];
+                  return AppointmentCard(
+                    appointment: item,
+                    onCancel: controller.selectedTab == 0 ? () {
+                      controller.cancelAppointment(item.paymentId!, item.id!);
+                    } : null,
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      );
+    },
+    ),
+    );
+  }
+
+  // Widget sectionTitle(String title) {
+  //
+  //   return Padding(
+  //     padding: const EdgeInsets.only(bottom: 15),
+  //
+  //     child: Text(
+  //       title,
+  //       style: const TextStyle(
+  //         fontSize: 20,
+  //         fontWeight: FontWeight.bold,
+  //       ),
+  //     ),
+  //   );
+  // }
+  // Widget customTab(MyAppointmentsController controller, int index, String title) {
+  //   bool isSelected = controller.selectedTab == index;
+  //   return GestureDetector(
+  //     onTap: () => controller.changeTab(index),
+  //     child: AnimatedContainer(
+  //       duration: const Duration(milliseconds: 300),
+  //       // نتحكم بالعرض ليكون متناسق
+  //       padding: const EdgeInsets.symmetric(vertical: 12),
+  //       decoration: BoxDecoration(
+  //         // إضافة خط سفلي فقط إذا كان التبويب مختاراً
+  //         border: Border(
+  //           bottom: BorderSide(
+  //             color: isSelected ? AppColor.secondyColor : Colors.transparent,
+  //             width: 3, // سماكة الخط تحت النص
+  //           ),
+  //         ),
+  //       ),
+  //       child: Text(
+  //         title,
+  //         textAlign: TextAlign.center,
+  //         style: TextStyle(
+  //           // النص المختار يكون لونه غامق وبارز أكثر
+  //           color: isSelected ? AppColor.secondyColor : Colors.grey.shade500,
+  //           fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+  //           fontSize: 16,
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
+  Widget customTab(MyAppointmentsController controller, int index, String title) {
+    bool isSelected = controller.selectedTab == index;
+    return GestureDetector(
+      onTap: () => controller.changeTab(index),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        margin: const EdgeInsets.all(4), // مسافة بسيطة بداخل الكونتينر الأبيض
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          // المختار بياخد اللون الأخضر (أو لون تطبيقك)، وغير المختار شفاف
+          color: isSelected ? AppColor.secondyColor : Colors.transparent,
+          borderRadius: BorderRadius.circular(50), // زوايا منحنية للمختار
+        ),
+        child: Text(
+          title,
+          style: TextStyle(
+            // النص المختار أبيض، وغير المختار رمادي
+            color: isSelected ? Colors.white : Colors.grey.shade600,
+            fontWeight: FontWeight.bold,
+            fontSize: 14,
+          ),
+        ),
+      ),
+    );
+  }
+}

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 import '../view/screen/NotificationView.dart';
 import '../view/screen/appiontement/first_appiontement_view.dart';
+import '../view/screen/appiontement/view/my-Appointments.dart';
 import '../view/screen/home.dart';
 import '../view/screen/profile.dart';
 import '../view/screen/profile/profile_page.dart';
@@ -20,7 +21,8 @@ class HomeScreenControllerImp extends HomeScreenController {
   List<Widget> listPage = [
      const Home(),
     ListCenterInfo(),
-    FirstAppiontementView(),
+    MyAppointmentsView(),
+   // FirstAppiontementView(),
     ProfilePage(),
 
   ];

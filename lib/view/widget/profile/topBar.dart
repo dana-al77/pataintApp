@@ -52,6 +52,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:patientapp/controller/home_controller.dart';
 
+import '../../../core/constant/color.dart';
+import '../appiontement/dilaog.dart';
+
 class ProfileTopBar extends StatelessWidget {
   final bool isEditPage; // 🔥 هل الصفحة تعديل؟
 
@@ -92,17 +95,25 @@ class ProfileTopBar extends StatelessWidget {
                 /// 🔙 رجوع
                 Get.back();
               } else {
-                /// 🚪 تسجيل خروج
-                Get.defaultDialog(
+                showCustomConfirmDialog(
                   title: "تسجيل الخروج",
-                  middleText: "هل أنت متأكد؟",
-                  textCancel: "إلغاء",
-                  textConfirm: "خروج",
-                  confirmTextColor: Colors.white,
-                  onConfirm: () {
-                    controller.logout();
-                  },
+                  message: "هل تريدين الخروج من حسابكِ؟",
+                  icon: Icons.logout_rounded,
+                  iconColor: AppColor.secondyColor,
+                  confirmBtnText: "خروج",
+                  onConfirm: () => controller.logout(),
                 );
+                /// 🚪 تسجيل خروج
+                // Get.defaultDialog(
+                //   title: "تسجيل الخروج",
+                //   middleText: "هل أنت متأكد؟",
+                //   textCancel: "إلغاء",
+                //   textConfirm: "خروج",
+                //   confirmTextColor: Colors.white,
+                //   onConfirm: () {
+                //     controller.logout();
+                //   },
+                // );
               }
             },
           ),

@@ -11,7 +11,8 @@ class MedicalTestData {
   //  required String medicalRecordId,
     required String testType,
     required String notes,
-    required File file,
+   // required File files,
+    required List<File> files
   }) async {
 
     var response = await crud.postDataWithFileAndToken(
@@ -21,7 +22,8 @@ class MedicalTestData {
         "test_type": testType,
         "notes": notes,
       },
-      file,
+      //file,
+      files.first,
       "file", // 👈 نفس اسم الحقل بالبوستمان
     );
 
