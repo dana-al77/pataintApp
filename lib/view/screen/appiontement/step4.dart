@@ -97,7 +97,13 @@ class Step4Widget extends GetView<FistAppiontController> {
                 ReviewItem(label: "ضغط الدم", values: [controller.bloodPressure.text]),
               ],
             ),
-
+            CustomStep3(
+              label: "مبلغ العربون",
+              hint: "أدخل مبلغ الدفع",
+              icon: Icons.payments_outlined,
+              iconColor: Colors.green,
+              controller: controller.amount,
+            ),
            // const SizedBox(height: 10),
             // حقل الملاحظات الإضافية
             CustomStep3(

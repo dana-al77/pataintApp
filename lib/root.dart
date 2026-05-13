@@ -11,8 +11,11 @@ import 'package:patientapp/view/screen/auth/verfiy_code_sign_up.dart';
 import 'package:patientapp/view/screen/chat/chat_view.dart';
 import 'package:patientapp/view/screen/home.dart';
 import 'package:patientapp/view/screen/homescreen.dart';
+import 'package:patientapp/view/screen/qr/FullMedicalRecordView.dart';
+import 'package:patientapp/view/screen/qr/medical_record_page.dart';
 import 'package:patientapp/view/screen/onboarding.dart';
 import 'package:patientapp/view/screen/profile/profile_page.dart';
+import 'package:patientapp/view/screen/qr/qr_home_view.dart';
 import 'package:patientapp/view/screen/upload_medical.dart';
 import 'package:patientapp/view/widget/home/centerInfo/list_center_info.dart';
 import 'package:patientapp/view/widget/home/doctor/doctor_page.dart';
@@ -23,7 +26,7 @@ import 'core/middleware/my_middleware.dart';
 List<GetPage<dynamic>>? routes = [
   GetPage(
       name: "/", page: () => const Onboarding()
-     , middlewares: [MyMiddeeWare()]
+    , middlewares: [MyMiddeeWare()]
   ),
   // onBoearding
 
@@ -55,6 +58,8 @@ List<GetPage<dynamic>>? routes = [
   GetPage(name: AppRoute.getProfile, page: () =>  ProfilePage()),
 
   GetPage(name: AppRoute.upLoadMedical, page: () =>  UploadMedical()),
+  GetPage(name: AppRoute.medicalQR, page: () =>  MedicalQrView()),
+  GetPage(name: AppRoute.tabQR, page: () =>  QrHomeView()),
 
 
 ];

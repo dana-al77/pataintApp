@@ -57,7 +57,21 @@ class Step3Widget extends GetView<FistAppiontController> {
               iconColor: Colors.pinkAccent,
               controller: controller.bloodPressure,
             ),
+            CustomStep3(
+              label: "الحالة الاجتماعية",
+              hint: "single / married",
+              icon: Icons.favorite_border,
+              iconColor: Colors.redAccent,
+              controller: controller.maritalStatus,
+            ),
 
+            CustomStep3(
+              label: "عدد الأولاد",
+              hint: "0",
+              icon: Icons.child_care,
+              iconColor: Colors.orange,
+              controller: controller.numberOfChildren,
+            ),
             // العمليات السابقة (حقل طويل)
             CustomStep3(
               label: "العمليات الجراحية السابقة",

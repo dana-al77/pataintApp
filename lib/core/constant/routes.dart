@@ -22,6 +22,8 @@ class AppRoute {
   static const String getProfile = "/getProfile";
   static const String upLoadMedical = "/uploadmedical";
 
+  static const String medicalQR = "/medicalQr";
+  static const String tabQR = "/tabQr";
 
 
 }

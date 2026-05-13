@@ -12,7 +12,7 @@ import '../../data/model/support_model.dart';
 abstract class servicesController extends GetxController {
   goToFirstAppiont();
   goToUpLoad();
-
+  goToQR();
 }
 
 class servicesControllerImp extends servicesController {
@@ -23,6 +23,11 @@ class servicesControllerImp extends servicesController {
   goToUpLoad(){
     Get.toNamed(AppRoute.upLoadMedical);
  }
+  goToQR(){
+//    Get.to(() => QrHomeView());
+
+    Get.toNamed(AppRoute.medicalQR);
+  }
 
 
 

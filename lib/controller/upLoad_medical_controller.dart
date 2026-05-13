@@ -64,7 +64,7 @@ class MedicalTestController extends GetxController {
   //   update();
   // }
   Future<void> chooseFile() async {
-    FilePickerResult? result = await FilePicker.pickFiles(
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx'],
       allowMultiple: true,

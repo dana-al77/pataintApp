@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../../core/class/statusrequest.dart';
 import '../../core/functions/handling_data_controller.dart';
 import '../data/datasource/remote/review_data.dart';
+import '../data/model/review_model.dart';
 
 class ReviewController extends GetxController {
 
@@ -13,15 +14,50 @@ class ReviewController extends GetxController {
 
   int rating = 0;
   TextEditingController comment = TextEditingController();
-
+  String? doctorId;
   String? reviewId;
-
   /// ⭐ اختيار التقييم
   void setRating(int value) {
     rating = value;
     update();
   }
+  List<ReviewModel> reviews = [];
+  double averageRating = 0.0;
 
+  int totalReviews = 0;
+
+  getReviews(String doctorId) async {
+
+    statusRequest = StatusRequest.loading;
+    update();
+
+    var response = await reviewData.getReviews(doctorId);
+
+    statusRequest = handlingData(response);
+
+    if (statusRequest == StatusRequest.success) {
+
+      if (response['success'] == true) {
+
+        /// ⭐ average rating
+        averageRating = double.parse(
+          response['data']['average_rating'].toString(),
+        );
+
+        /// ⭐ total reviews
+        totalReviews = response['data']['total_reviews'];
+
+        /// ⭐ تحويل JSON -> Model
+        reviews = List<ReviewModel>.from(
+          response['data']['reviews'].map(
+                (e) => ReviewModel.fromJson(e),
+          ),
+        );
+      }
+    }
+
+    update();
+  }
   /// ➕ إضافة تقييم
   addReview(String doctorId) async {
 

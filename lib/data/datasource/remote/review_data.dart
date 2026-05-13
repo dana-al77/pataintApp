@@ -5,7 +5,14 @@ class ReviewData {
   Crud crud;
 
   ReviewData(this.crud);
+  getReviews(String doctorId) async {
 
+    var response = await crud.getData(
+      "${AppLink.getDoctorReviews}/$doctorId",
+    );
+
+    return response.fold((l) => l, (r) => r);
+  }
   /// ➕ إضافة تقييم
   addReview({
     required String doctorId,

@@ -17,11 +17,15 @@ class ListServicesHome extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               CustomServiceItem(
-                title: "الدعم النفسي",
+                title: "السجل الطبي",
                 icon: Icons.lightbulb_outline,
                 backgroundColor: Colors.blue,
                 iconColor: Colors.blue,
-                onTap: () {},
+                onTap: () {
+                  print("NAVIGATING TO TAB QR");
+                  controller.goToQR();
+
+                },
               ),
               CustomServiceItem(
                 title: "رفع التحاليل",

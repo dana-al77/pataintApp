@@ -28,12 +28,15 @@ class FistAppiontController extends GetxController {
   late TextEditingController surgeries;
   late TextEditingController familyHistory;
   late TextEditingController bloodPressure;
-
+  late TextEditingController maritalStatus;
+  late TextEditingController numberOfChildren;
+  late TextEditingController amount;
   StatusRequest statusRequest = StatusRequest.none;
 
   FistAppiontData medicalRecordData = FistAppiontData(Get.find());
   PaymentStatusData paymentStatusData = PaymentStatusData(Get.find());
-
+  String? qrCodeUrl;
+  String? qrCodePath;
   String? paymentId;
   bool isSmoker = false;
   bool get isLastStep => currentStep == 3;
@@ -124,6 +127,9 @@ class FistAppiontController extends GetxController {
     surgeries = TextEditingController();
     familyHistory = TextEditingController();
     bloodPressure = TextEditingController();
+    maritalStatus = TextEditingController();
+    numberOfChildren = TextEditingController();
+    amount = TextEditingController();
     super.onInit();
 
   }
@@ -176,7 +182,12 @@ class FistAppiontController extends GetxController {
         return false;
       }
     }
-
+    if (currentStep == 3) {
+      if (amount.text.isEmpty) {
+        Get.snackbar("خطأ", "أدخل مبلغ الدفع");
+        return false;
+      }
+    }
     return true;
   }
   void goToStep(int stepIndex) {
@@ -266,7 +277,9 @@ class FistAppiontController extends GetxController {
         // date: date,
         // startTime: startTime,
         // endTime: endTime,
-        amount: '1000',
+        amount: amount.text,
+        maritalStatus: maritalStatus.text,
+        numberOfChildren: numberOfChildren.text,
       );
 
       isLoading = false;
@@ -287,7 +300,10 @@ class FistAppiontController extends GetxController {
         this.paymentId = paymentId;
         // 👇 بيانات الموعد
         final appointment = response['data']['appointment'];
-
+        qrCodeUrl = response['data']['qr_code_url'];
+        qrCodePath =
+        response['data']['medical_record']['qr_code_path'];
+        this.qrCodeUrl = qrCodeUrl;
         final date = appointment['date'];
         final startTime = appointment['start_time'];
         final endTime = appointment['end_time'];

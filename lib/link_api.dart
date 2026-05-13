@@ -1,6 +1,6 @@
 class AppLink {
   // static const String server = "https://05ee-185-107-80-121.ngrok-free.app/";
-  static const String server = "https://66ba-185-184-192-239.ngrok-free.app/";
+  static const String server = "https://078f-205-147-17-35.ngrok-free.app/";
   // static const String server = "http://192.168.1.109:8000/";
 
   static const String test = "$server";
@@ -50,6 +50,9 @@ class AppLink {
   static const String addReview = "${server}api/addReview";
   static const String updateReview = "${server}api/updateReview";
   static const String deleteReview = "${server}api/deleteReview";
+  static const String getDoctorReviews = "${server}api/getDoctorReviews";
 
 
+  //// QR
+  static const String getMedicalQr = "${server}api/medical-record/qr";
 }
