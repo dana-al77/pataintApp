@@ -22,7 +22,7 @@ class EditProfileController extends GetxController {
 
   late TextEditingController dateOfBirth;
   late TextEditingController emergencyContact;
- // late TextEditingController phone;
+  late TextEditingController phone;
 
   /// 📌 Dropdown values
   String? selectedGovernorate;
@@ -44,9 +44,19 @@ class EditProfileController extends GetxController {
   }
   /// 📌 المحافظات والمدن
   Map<String, List<String>> governoratesAndCities = {
-    "دمشق": ["دمشق", "قدسيا", "حرستا"],
-    "حلب": ["حلب", "أعزاز"],
-    "حمص": ["حمص", "الرستن"],
+    "دمشق": ["دمشق", "قدسيا", "حرستا", "الكسوة"],
+    "حلب": ["حلب", "أعزاز", "منبج", "عفرين"],
+    "حماة": ["حماة", "السلمية", "الحميراء"],
+    "اللاذقية": ["اللاذقية", "جبلة", "رأس البسيط"],
+    "طرطوس": ["طرطوس", "بانياس", "صفوة"],
+    "درعا": ["درعا", "نوى", "صيدا"],
+    "القنيطرة": ["القنيطرة", "حضر", "جباتا الخشب"],
+    "الرقة": ["الرقة", "الطبقة", "الشدادي"],
+    "الحسكة": ["الحسكة", "القامشلي", "تل تمر"],
+    "إدلب": ["إدلب", "سلقين", "معرة النعمان"],
+    "دير الزور": ["دير الزور", "البصيرة", "الميادين"],
+    "حمص": ["حمص", "الرستن", "القصير"],
+    "سويداء": ["السويداء", "شهبا", "صحراء السويداء"],
   };
   void startEditing(String field) {
     editingField = field;
@@ -92,6 +102,7 @@ class EditProfileController extends GetxController {
         "country": selectedGovernorate,
         "city": selectedCity,
         "emergency_contact": emergencyContact.text,
+        "phone":phone.text
       }, imageFile: imageFile,
       );
 
@@ -133,6 +144,9 @@ class EditProfileController extends GetxController {
 
     emergencyContact = TextEditingController(
         text: profileModel.patient?.emergencyContact);
+
+    phone = TextEditingController(
+        text: profileModel.phone);
 
     selectedGovernorate = profileModel.patient?.country;
 
@@ -183,7 +197,7 @@ class EditProfileController extends GetxController {
   void dispose() {
     dateOfBirth.dispose();
     emergencyContact.dispose();
-   // phone.dispose();
+    phone.dispose();
     super.dispose();
   }
   Future<void> pickDate() async {

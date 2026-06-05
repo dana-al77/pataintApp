@@ -5,6 +5,7 @@ import '../../../../controller/appiontement/my_appointments_controller.dart';
 import '../../../../core/class/handling_data_view.dart';
 import '../../../../core/constant/color.dart';
 import '../../../widget/appiontement/my-appiontement/appointment_card.dart';
+import '../../../widget/customappbar.dart';
 
 
 class MyAppointmentsView extends StatelessWidget {
@@ -20,14 +21,10 @@ class MyAppointmentsView extends StatelessWidget {
 
       backgroundColor: AppColor.backgroundColor,
 
-      appBar: AppBar(
-        backgroundColor: AppColor.backgroundColor,
-        elevation: 0,
-        title: const Text(
-          "حجوزاتي",
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
-        ),
-        centerTitle: true,
+      appBar:const PioneersMedicalAppBar(
+        icon: Icons.calendar_month_rounded,
+        title: "حجوزاتي",
+
       ),
 
       body: GetBuilder<MyAppointmentsController>(

@@ -18,7 +18,7 @@ class ListServicesHome extends StatelessWidget {
             children: [
               CustomServiceItem(
                 title: "السجل الطبي",
-                icon: Icons.lightbulb_outline,
+                icon: Icons.qr_code_2_sharp,
                 backgroundColor: Colors.blue,
                 iconColor: Colors.blue,
                 onTap: () {

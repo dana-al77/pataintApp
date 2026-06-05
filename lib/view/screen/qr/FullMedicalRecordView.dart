@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import '../../../controller/medical_record_qr_controller.dart';
 import '../../../core/constant/color.dart';
+import '../../widget/clipper/header_clipper_medical.dart';
 
 class FullMedicalRecordView extends StatelessWidget {
   const FullMedicalRecordView({super.key});
@@ -140,9 +141,12 @@ class PremiumProfileHeader extends StatelessWidget {
           ClipPath(
             clipper: HeaderClipper(),
             child: Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [Color(0xff408bcf), Color(0xff408bcf)],
+                  colors: [
+                    AppColor.secondyColor,
+                     AppColor.blueColor
+                  ],
                   begin: Alignment.topRight,
                   end: Alignment.bottomLeft,
                 ),
@@ -279,22 +283,7 @@ class PremiumProfileHeader extends StatelessWidget {
   }
 }
 
-// الكليبر المسؤول عن رسم الانحناء الموجود في الصورة
-class HeaderClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    Path path = Path();
-    path.lineTo(0, size.height - 80);
-    path.quadraticBezierTo(
-        size.width / 2, size.height, size.width, size.height - 80);
-    path.lineTo(size.width, 0);
-    path.close();
-    return path;
-  }
 
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
-}
 
 // --- شبكة البيانات الصحية (Bento Grid) ---
 class HealthOverviewGrid extends StatelessWidget {
@@ -350,7 +339,11 @@ class HealthOverviewGrid extends StatelessWidget {
       height: 120,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(colors: [Color(0xFF64B5F6), Color(0xFF408BCF)],),
+        gradient: const LinearGradient(colors:
+        [
+          AppColor.secondyColor,
+          AppColor.blueColor
+        ],),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
@@ -389,7 +382,10 @@ class HealthOverviewGrid extends StatelessWidget {
       height: 120,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        gradient: LinearGradient(colors: [Color(0xFF64B5F6), Color(0xFF408BCF)],),
+        gradient: LinearGradient(colors: [
+          AppColor.secondyColor,
+          AppColor.blueColor
+        ],),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(

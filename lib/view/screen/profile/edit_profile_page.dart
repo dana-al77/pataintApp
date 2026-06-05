@@ -21,35 +21,35 @@ class EditProfilePage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColor.backgroundColor,
-      body: Stack(
-        children: [
-          const ProfileHeaderBackground(),
-
-          SingleChildScrollView(
-            child: Column(
+      body: SingleChildScrollView(
+        child: Stack(
+          children: [
+            const ProfileHeaderBackground(),
+        
+            Column(
               children: [
-
+            
                 const SizedBox(height: 40),
-
+            
                 const ProfileTopBar(
                   isEditPage: true,
                 ),
                 const SizedBox(height: 40),
                 const EditProfileAvatarSection(),
-                const SizedBox(height: 30),
-
+                const SizedBox(height: 50),
+            
                 // ===================== CARD 1 =====================
                 const EditProfileSection(),
                 const SizedBox(height: 20),
-
+            
                 // ===================== SAVE BUTTON =====================
                 const SaveProfileButton(),
-
+            
                 const SizedBox(height: 30),
               ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

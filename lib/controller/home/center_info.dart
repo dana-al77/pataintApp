@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import '../../core/class/statusrequest.dart';
 import '../../core/functions/handling_data_controller.dart';
 import '../../data/datasource/remote/center_info_data.dart';
@@ -13,49 +14,44 @@ class ViewCenetrInfoControllerImp extends ViewCenetrInfoController {
   StatusRequest statusRequest = StatusRequest.none;
   CenterInfoData centerInfoData = CenterInfoData(Get.find());
   List<CenterInfo> data = [];
+
+  String getCurrentArabicDay() {
+    String englishDay = DateFormat('EEEE').format(DateTime.now()); // بيجيب مثلاً "Saturday"
+
+    Map<String, String> daysTranslation = {
+      'Monday': 'الإثنين',
+      'Tuesday': 'الثلاثاء',
+      'Wednesday': 'الأربعاء',
+      'Thursday': 'الخميس',
+      'Friday': 'الجمعة',
+      'Saturday': 'السبت',
+      'Sunday': 'الأحد',
+    };
+
+    return daysTranslation[englishDay] ?? "";
+  }
+
   List<CenterInfo> getDummyData() {
     return [
       CenterInfo(
         location: "مركز الشفاء الطبي",
-        openingHours: "من 8 صباحاً حتى 10 مساءً",
+        openingHours: {
+          "السبت": "08:00 ص - 10:00 م",
+          "الأحد": "08:00 ص - 10:00 م",
+          "الإثنين": "08:00 ص - 10:00 م",
+          "الثلاثاء": "08:00 ص - 10:00 م",
+          "الأربعاء": "08:00 ص - 10:00 م",
+          "الخميس": "08:00 ص - 08:00 م",
+          "الجمعة": "مغلق",
+        },
         addressOnMap: "دمشق - شارع الثورة",
         branches: "فرع المزة - فرع البرامكة",
-        services: "طب عام - أطفال - نسائية",
+        services: "طب عام - مختبر - نسائية-تحاليل-ايكو-تخطيط قلب-أشعة",
       ),
-      // CenterInfo(
-      //   location: "مركز الحياة",
-      //   openingHours: "24 ساعة",
-      //   addressOnMap: "حلب - الفرقان",
-      //   branches: "فرع رئيسي",
-      //   services: "إسعاف - مخابر - أشعة",
-      // ),
+
     ];
   }
-  // @override
-  // getCenterInfo() async {
-  //   data.clear();
-  //   statusRequest = StatusRequest.loading;
-  //   update();
-  //
-  //   var response = await centerInfoData.get();
-  //   print("==============================response $response");
-  //
-  //   statusRequest = handlingData(response);
-  //
-  //   if (StatusRequest.success == statusRequest) {
-  //     if (response['success'] == true) {
-  //       List dataList = response['data'];
-  //       for (var e in dataList) {
-  //         print("🟡 Raw branch from API: $e");
-  //       }
-  //       data.addAll(dataList.map((e) => CenterInfo.fromJson(e)));
-  //       print("valid");
-  //     } else {
-  //       statusRequest = StatusRequest.failure;
-  //     }
-  //   }
-  //   update();
-  // }
+
   @override
   getCenterInfo() async {
     data.clear();

@@ -9,6 +9,7 @@ class ProfileModel {
   String? profileImage;
   PatientModel? patient;
   String? phone;
+  String? gender;
   ProfileModel({
     this.id,
     this.name,
@@ -17,7 +18,8 @@ class ProfileModel {
     this.role,
     this.profileImage,
     this.patient,
-    this.phone
+    this.phone,
+    this.gender,
   });
 
   ProfileModel.fromJson(Map<String, dynamic> json) {
@@ -27,7 +29,8 @@ class ProfileModel {
     status = json['status'];
     role = json['role'];
     profileImage = json['profile_image'];
-
+    phone =json['phone'];
+    gender=json['gender'];
     patient = json['patient'] != null
         ? PatientModel.fromJson(json['patient'])
         : null;

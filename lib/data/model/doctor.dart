@@ -1,35 +1,4 @@
-// class DoctorModel {
-//   int? id;
-//   String? name;
-//   String? email;
-//   String? specialization;
-//   int? yearsOfExperience;
-//   String? licenseNumber;
-//   String? bio;
-//   String? department;
-//
-//   DoctorModel({
-//     this.id,
-//     this.name,
-//     this.email,
-//     this.specialization,
-//     this.yearsOfExperience,
-//     this.licenseNumber,
-//     this.bio,
-//     this.department,
-//   });
-//
-//   DoctorModel.fromJson(Map<String, dynamic> json) {
-//     id = json['id'];
-//     name = json['name'];
-//     email = json['email'];
-//     specialization = json['specialization'];
-//     yearsOfExperience = json['years_of_experience'];
-//     licenseNumber = json['license_number'];
-//     bio = json['bio'];
-//     department = json['department'];
-//   }
-// }
+
 import 'package:patientapp/data/model/schedula.dart';
 
 class DoctorModel {

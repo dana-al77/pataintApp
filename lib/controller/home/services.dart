@@ -23,7 +23,7 @@ class servicesControllerImp extends servicesController {
   goToUpLoad(){
     Get.toNamed(AppRoute.upLoadMedical);
  }
-  goToQR(){
+    goToQR(){
 //    Get.to(() => QrHomeView());
 
     Get.toNamed(AppRoute.medicalQR);

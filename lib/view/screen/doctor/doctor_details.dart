@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:patientapp/core/constant/color.dart';
+import 'package:patientapp/view/screen/doctor/reviews/reviews_tab.dart';
 import 'package:patientapp/view/screen/doctor/select_date.dart';
 import 'package:patientapp/view/screen/doctor/time_slote.dart';
 
@@ -73,39 +74,65 @@ class _DoctorDetailsPageState extends State<DoctorDetailsPage>
       ),
 
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
 
-          /// 🔥 HEADER
-          DoctorHeader(doctor: widget.doctor),
+          Stack(
+            clipBehavior: Clip.none,
+            children: [
+              DoctorHeader(doctor: widget.doctor),
 
-          const SizedBox(height: 5),
+              Positioned(
+                top: 270, // عدل حسب ارتفاع الهيدر
+                left: 0,
+                right: 0,
+                child: DoctorStats(
+                  doctor: widget.doctor,
+                  reviewController: reviewController,
+                ),
+              ),
+            ],
+          ),
+        //  DoctorStats(doctor: widget.doctor),
 
-          /// 🔥 STATS
-          DoctorStats(doctor: widget.doctor),
-
-          const SizedBox(height: 10),
+          const SizedBox(height: 50),
 
           /// 🔥 TAB BAR
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(30),
-            ),
-            child: TabBar(
-              controller: tabController,
-              indicator: BoxDecoration(
-                color: AppColor.secondyColor,
-                borderRadius: BorderRadius.circular(30),
-              ),
-              labelColor: Colors.white,
-              unselectedLabelColor: Colors.black87,
-              dividerColor: Colors.transparent,
-              tabs: const [
-                Tab(text: "معلومات"),
-                Tab(text: "المواعيد"),
-                Tab(text: "التقييمات"),
-              ],
+            padding: const EdgeInsets.all(4),
+            child: AnimatedBuilder(
+              animation: tabController,
+              builder: (context, child) {
+                return TabBar(
+                  controller: tabController,
+                  // 👇 هدول السطرين هما السر لمنع الرجة وتغيير الحجم الافتراضي
+                  labelPadding: EdgeInsets.zero,
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  indicator: BoxDecoration(
+                    color: AppColor.secondyColor.withOpacity(0.9),
+                    borderRadius: BorderRadius.circular(50),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColor.secondyColor.withOpacity(0.15),
+                        blurRadius: 10,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  labelColor: Colors.white,
+                  unselectedLabelColor: Colors.black54,
+                  labelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                  unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal, fontSize: 14),
+                  dividerColor: Colors.transparent,
+                  tabs: [
+
+                    _buildCustomTab(text: "المواعيد", index: 0),
+                    _buildCustomTab(text: "التقييمات", index: 1),
+                    _buildCustomTab(text: "معلومات", index: 2),
+                  ],
+                );
+              },
             ),
           ),
 
@@ -116,15 +143,14 @@ class _DoctorDetailsPageState extends State<DoctorDetailsPage>
             child: TabBarView(
               controller: tabController,
               children: [
-
-                /// 🩺 INFO
-                _infoTab(),
-
                 /// 📅 SCHEDULE
                 _scheduleTab(),
-
                 /// ⭐ REVIEWS
-                _reviewsTab(),
+                ReviewsTab(
+                  doctorId: widget.doctor.doctorId!.toString(),
+                ),
+                /// 🩺 INFO
+                _infoTab(),
               ],
             ),
           ),
@@ -133,12 +159,14 @@ class _DoctorDetailsPageState extends State<DoctorDetailsPage>
     );
   }
 
+
   /// =========================
   /// 🩺 INFO TAB
   /// =========================
   Widget _infoTab() {
     return SingleChildScrollView(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
 
           DoctorBio(
@@ -174,271 +202,34 @@ class _DoctorDetailsPageState extends State<DoctorDetailsPage>
   /// =========================
   /// ⭐ REVIEWS TAB
   /// =========================
-  Widget _reviewsTab() {
-    return Column(
-      children: [
 
-        const SizedBox(height: 10),
-
-        /// ➕ زر إضافة تقييم
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: ElevatedButton.icon(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColor.secondyColor,
-              minimumSize: const Size(double.infinity, 52),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(14),
-              ),
-            ),
-            onPressed: _showReviewDialog,
-            icon: const Icon(Icons.star, color: Colors.white),
-            label: const Text("إضافة تقييم"),
-          ),
-        ),
-
-        const SizedBox(height: 10),
-
-        /// 📦 LIST
-        Expanded(
-          child: GetBuilder<ReviewController>(
-            builder: (ctrl) {
-
-              if (ctrl.reviews.isEmpty) {
-                return const Center(child: Text("لا يوجد تقييمات"));
-              }
-
-              return ListView.builder(
-                itemCount: ctrl.reviews.length,
-                itemBuilder: (context, index) {
-
-                  final review = ctrl.reviews[index];
-
-                  return Container(
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    padding: const EdgeInsets.all(14),
-
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
-                          blurRadius: 10,
-                        ),
-                      ],
-                    ),
-
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-
-                        /// 👤 Avatar
-                        CircleAvatar(
-                          radius: 24,
-                          backgroundColor: Colors.grey.shade300,
-                          backgroundImage: review.patient?.profileImage != null
-                              ? NetworkImage(review.patient!.profileImage!)
-                              : null,
-                          child: review.patient?.profileImage == null
-                              ? Text(review.patient?.name[0] ?? "")
-                              : null,
-                        ),
-
-                        const SizedBox(width: 12),
-
-                        /// 📦 CONTENT
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-
-                              /// 👤 NAME + DATE
-                              Row(
-                                children: [
-
-                                  Expanded(
-                                    child: Text(
-                                      review.patient?.name ?? "",
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-
-                                  Text(
-                                    formatDate(review.createAt),
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.grey.shade600,
-                                    ),
-                                  ),
-                                ],
-                              ),
-
-                              const SizedBox(height: 6),
-
-                              /// ⭐ STARS
-                              Row(
-                                children: List.generate(
-                                  review.rating,
-                                      (i) => const Icon(
-                                    Icons.star,
-                                    size: 18,
-                                    color: Colors.orange,
-                                  ),
-                                ),
-                              ),
-
-                              const SizedBox(height: 8),
-
-                              /// 💬 COMMENT
-                              Text(
-                                review.comment ?? "لا يوجد تعليق",
-                                style: TextStyle(
-                                  color: Colors.grey.shade700,
-                                  height: 1.4,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              );
-            },
-          ),
-        ),
-      ],
-    );
-  }
   /// =========================
   /// ⭐ REVIEW DIALOG
   /// =========================
-  void _showReviewDialog() {
+  Widget _buildCustomTab({required String text, required int index}) {
+    final bool isUnselected = tabController.index != index;
 
-    Get.dialog(
-
-      GetBuilder<ReviewController>(
-
-        init: reviewController,
-
-        builder: (ctrl) {
-
-          return AlertDialog(
-
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-
-            title: const Text("أضف تقييم"),
-
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-
-                /// ⭐ STARS
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-
-                  children: List.generate(5, (index) {
-
-                    return IconButton(
-
-                      onPressed: () {
-                        ctrl.setRating(index + 1);
-                      },
-
-                      icon: Icon(
-                        Icons.star,
-
-                        color: index < ctrl.rating
-                            ? Colors.orange
-                            : Colors.grey,
-                      ),
-                    );
-                  }),
-                ),
-
-                const SizedBox(height: 10),
-
-                /// 💬 COMMENT
-                TextField(
-                  controller: ctrl.comment,
-
-                  maxLines: 3,
-
-                  decoration: InputDecoration(
-                    hintText: "اكتب تعليقك...",
-
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-
-            actions: [
-
-              TextButton(
-                onPressed: () {
-                  Get.back();
-                },
-
-                child: const Text("إلغاء"),
-              ),
-
-              ElevatedButton(
-                onPressed: () {
-
-                  ctrl.addReview(
-                    widget.doctor.doctorId!.toString(),
-                  );
-
-                  Get.back();
-                },
-
-                child: const Text("إرسال"),
-              ),
-            ],
-          );
-        },
+    return Tab(
+      // 👇 قفلنا الارتفاع بـ 45 بكسل ثابتين للكل لمنع أي تغيير بالحجم
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        alignment: Alignment.center,
+        width: double.infinity,
+        height: double.infinity,
+        // 👇 مسافة جانبية ثابتة وموحدة بين الأزرار لتبتعد عن بعضها بشكل منظم
+        margin: const EdgeInsets.symmetric(horizontal: 6),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(50),
+          // البوردر ثابت الحجم (1.2) دائماً، التغير فقط باللون لمنع أي اهتزاز بكسل واحد
+          border: Border.all(
+            color: isUnselected
+                ? Colors.grey.withOpacity(0.35)
+                : Colors.transparent,
+            width: 1.2,
+          ),
+        ),
+        child: Text(text),
       ),
     );
   }
-}//       SingleChildScrollView(
-//         child: Column(
-//           children: [
-//
-//             Column(
-//               children: [
-//
-//                 DoctorHeader(doctor: widget.doctor),
-//
-//                const SizedBox(height: 5),
-//
-//                 DoctorStats(doctor: widget.doctor),
-//                 const SizedBox(height: 5),
-//
-//                 DoctorBio(bio: widget.doctor.bio),
-//                 const SizedBox(height: 5),
-//
-//                 ScheduleDateWidget(doctor: widget.doctor),
-//                 const SizedBox(height: 5),
-//
-//                 ScheduleTimeWidget(),
-//
-//               ],
-//             )
-//
-//           ],
-//         ),
-//       ),
-//     );
-//   }
+}

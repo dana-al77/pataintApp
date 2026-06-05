@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import '../../core/class/statusrequest.dart';
 import '../../core/functions/handling_data_controller.dart';
+import '../core/services/services.dart';
 import '../data/datasource/remote/review_data.dart';
 import '../data/model/review_model.dart';
 
@@ -11,6 +12,8 @@ class ReviewController extends GetxController {
   StatusRequest statusRequest = StatusRequest.none;
 
   late ReviewData reviewData;
+  final myServices = Get.find<MyServices>();
+  String? currentUserId;
 
   int rating = 0;
   TextEditingController comment = TextEditingController();
@@ -59,11 +62,12 @@ class ReviewController extends GetxController {
     update();
   }
   /// ➕ إضافة تقييم
-  addReview(String doctorId) async {
+  /// ➕ إضافة تقييم
+  Future<bool> addReview(String doctorId) async {
 
     if (rating == 0) {
       Get.snackbar("تنبيه", "اختر تقييم");
-      return;
+      return false;
     }
 
     statusRequest = StatusRequest.loading;
@@ -74,33 +78,48 @@ class ReviewController extends GetxController {
       rating: rating.toString(),
       comment: comment.text,
     );
+
     print("RESPONSE TYPE: ${response.runtimeType}");
     print("RESPONSE: $response");
+
     statusRequest = handlingData(response);
 
     if (statusRequest == StatusRequest.success) {
+
       if (response['success'] == true) {
 
-        reviewId = response['data']['id'].toString();
 
         Get.snackbar("نجاح", "تم إضافة التقييم");
 
-      } else {
+        update();
+
+        return true;
+      }
+
+      else {
+
         Get.snackbar(
           "خطأ",
           response['message'] is String
               ? response['message']
               : response['error'] ?? "حدث خطأ",
-        );      }
+        );
+
+        update();
+
+        return false;
+      }
     }
 
     update();
+
+    return false;
   }
 
   /// ✏️ تعديل التعليق
-  updateReview() async {
+  Future<bool> updateReview() async {
 
-    if (reviewId == null) return;
+    if (reviewId == null) return false;
 
     statusRequest = StatusRequest.loading;
     update();
@@ -113,14 +132,25 @@ class ReviewController extends GetxController {
     statusRequest = handlingData(response);
 
     if (statusRequest == StatusRequest.success) {
+
       if (response['success'] == true) {
+
         Get.snackbar("نجاح", "تم تعديل التعليق");
+
+        reviewId = null;
+        rating = 0;
+        comment.clear();
+
+        update();
+
+        return true;
       }
     }
 
     update();
-  }
 
+    return false;
+  }
   /// ❌ حذف
   deleteReview() async {
 
@@ -152,6 +182,9 @@ class ReviewController extends GetxController {
   @override
   void onInit() {
     reviewData = ReviewData(Get.find());
+    currentUserId =
+        myServices.sharedPreferences
+            .getString("id");
     super.onInit();
   }
 }

@@ -117,19 +117,6 @@ class MyAppointmentsController extends GetxController {
         Get.snackbar("خطأ", "فشل الاتصال بالسيرفر");
       }
       ////
-    //   update();
-    //
-    //   Get.snackbar(
-    //     "تم الإلغاء",
-    //     "تم إلغاء الحجز بنجاح",
-    //   );
-    //
-    // } else {
-    //
-    //   Get.snackbar(
-    //     "خطأ",
-    //     response['ErrorMessage'],
-    //   );
-    // }
+
   }
 }

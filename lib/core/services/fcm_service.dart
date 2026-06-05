@@ -38,37 +38,63 @@ class FCMService {
   static void setupListeners() {
 
     // ✅ لما الإشعار يوصل والتطبيق مفتوح
-
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print("🔥 وصل إشعار");
       print("🔔 إشعار وصل والتطبيق مفتوح");
       print("==================Title: ${message.notification?.title}");
       print("Body====================: ${message.notification?.body}");
+
       String title = message.notification?.title ?? "";
       String body = message.notification?.body ?? "";
-      Get.find<NotificationController>().addNotification(title, body);
-      if (message.notification != null) {
+
+      final controller = Get.find<NotificationController>();
+
+      controller.addNotification(title, body);
+
+      if (message.notification != null &&
+          !controller.isNotificationScreenOpen) {
         showNotification(
           message.notification!.title ?? "",
           message.notification!.body ?? "",
         );
       }
 
-      // 👇 أضيفي هذا
       if (message.data.isNotEmpty) {
         print("DATA: ${message.data}");
       }
     });
+    // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    //   print("🔥 وصل إشعار");
+    //   print("🔔 إشعار وصل والتطبيق مفتوح");
+    //   print("==================Title: ${message.notification?.title}");
+    //   print("Body====================: ${message.notification?.body}");
+    //   String title = message.notification?.title ?? "";
+    //   String body = message.notification?.body ?? "";
+    //   Get.find<NotificationController>().addNotification(title, body);
+    //   if (message.notification != null) {
+    //     showNotification(
+    //       message.notification!.title ?? "",
+    //       message.notification!.body ?? "",
+    //     );
+    //   }
+    //
+    //   // 👇 أضيفي هذا
+    //   if (message.data.isNotEmpty) {
+    //     print("DATA: ${message.data}");
+    //   }
+    // });
     // ✅ لما المستخدم يضغط على الإشعار
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       print("📲 المستخدم ضغط على الإشعار");
       print("📲 المستخدم ضغط على الإشعار");
 
       String? type = message.data['type'];
+      String title = message.notification?.title ?? "";
+      String body = message.notification?.body ?? "";
 
+      Get.find<NotificationController>().addNotification(title, body);
 
       // 👇 لاحقًا تفتح صفحة
-       //Get.toNamed(AppRoute.notification);
       Get.toNamed(
           AppRoute.notification ,
         arguments: {
@@ -77,6 +103,7 @@ class FCMService {
         },
       );
     });
+
   }
 
   // 🔔 دالة عرض الإشعار

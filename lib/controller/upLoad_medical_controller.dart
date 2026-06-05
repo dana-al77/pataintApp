@@ -28,6 +28,11 @@ class MedicalTestController extends GetxController {
   String? fileName;
   List<PlatformFile> selectedFiles = [];
   // 1️⃣ تحويل المتغير إلى قائمة ملفات
+  var selectedAnalysisType = 'Blood Test'.obs;
+  void changeAnalysisType(String type) {
+    selectedAnalysisType.value = type;
+  }
+
   //List<File> selectedFiles = [];
   // 2️⃣ قائمة لتخزين نسب التحميل لكل ملف (اختياري حسب منطق الرفع لديك)
   Map<int, double> filesProgress = {};
@@ -63,6 +68,39 @@ class MedicalTestController extends GetxController {
   //
   //   update();
   // }
+
+  final ImagePicker _picker = ImagePicker();
+  Future<void> takePhoto() async {
+    try {
+      // تشغيل الكاميرا لالتقاط صورة واحدة فقط
+      final XFile? photo = await _picker.pickImage(
+        source: ImageSource.camera,
+        imageQuality: 80, // اختياري: لتقليل حجم الصورة والحفاظ على الأداء
+      );
+
+      if (photo != null) {
+        // تحويل XFile إلى PlatformFile ليتم التعامل معه بنفس منطق الـ FilePicker تماماً
+        // (إذا كانت قائمة selectedFiles لديكِ تعتمد على نوع PlatformFile)
+        final platformFile = PlatformFile(
+          path: photo.path,
+          name: photo.name,
+          size: await photo.length(),
+        );
+
+        // إضافة الصورة الملتقطة إلى القائمة الخاصة بكِ
+        selectedFiles.add(platformFile);
+
+        // بدء محاكاة الرفع كما تفعلين مع الملفات العادية
+        int currentIndex = selectedFiles.length - 1;
+        _startIndividualUploadSimulation(currentIndex);
+
+        update(); // تحديث الواجهة لظهور الملف الجديد
+      }
+    } catch (e) {
+      print("Error picking image from camera: $e");
+    }
+  }
+
   Future<void> chooseFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,

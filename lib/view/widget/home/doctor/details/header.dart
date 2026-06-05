@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:patientapp/core/constant/color.dart';
 import 'package:patientapp/view/widget/home/doctor/details/wave.dart';
+import '../../../../../controller/review_controller.dart';
 import '../../../../../data/model/doctor.dart';
 import '../../../../../core/constant/imageasset.dart';
 
@@ -25,8 +26,9 @@ class DoctorHeader extends StatelessWidget {
           //   color: AppColor.secondyColor.withOpacity(0.7),
                 gradient: LinearGradient(
                   colors: [
-                    AppColor.inactiveDotColor.withOpacity(0.1),
-                    AppColor.secondyColor.withOpacity(0.8),
+                   AppColor.secondyColor.withOpacity(0.5),
+                    AppColor.blueColor.withOpacity(0.2),
+
                   ],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
@@ -38,15 +40,15 @@ class DoctorHeader extends StatelessWidget {
 
         /// 📦 المحتوى
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.only(left: 1,right: 10),
           child: Stack(
             children: [
               /// 🧑‍⚕️ صورة الدكتور
               Container(
                 height: 300,
-                alignment: Alignment.topRight,
+                alignment: Alignment.centerLeft,
                 child: Transform.translate(
-                  offset: const Offset(0, 30),
+                  offset: const Offset(0, 45),
                   child: Container(
                     child: Image.network(
                       doctor.image ?? "",
@@ -66,9 +68,9 @@ class DoctorHeader extends StatelessWidget {
               /// 🔙 زر الرجوع
               Positioned(
                 top: 50,
-                left: 0,
+                right: 10,
                 child: _buildCircleIcon(
-                  Icons.arrow_forward_ios,
+                  Icons.arrow_back_ios_new_rounded,
                       () => Get.back(),
                 ),
               ),
@@ -84,20 +86,12 @@ class DoctorHeader extends StatelessWidget {
               ),
 */
               Positioned(
-                top: 120,
-                left: 10,
+                top: 180,
+                right: 10,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    /// 🩺 التخصص
-                    Text(
-                      doctor.specialization ?? "Cardiologyist",
-                      style: TextStyle(
-                        color: Colors.grey.shade600,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
+
 
                    // const SizedBox(height: 6),
 
@@ -108,44 +102,107 @@ class DoctorHeader extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        height: 1.2, // 👈 spacing بين السطر
+                       // height: 1.2, // 👈 spacing بين السطر
                       ),
                     ),
-
-                    const SizedBox(height: 8),
-
-                    /// 💲 السعر
+                    /// 🩺 التخصص
                     Text(
-                      "hr / \$20.0",
+                      doctor.specialization ?? "Cardiologyist",
                       style: TextStyle(
-                        color: Colors.blue.shade700,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
+                        color: Colors.grey.shade600,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
                       ),
                     ),
 
-                    const SizedBox(height: 12),
+                    // /// 💲 السعر
+                    // Text(
+                    //   "hr / \$20.0",
+                    //   style: TextStyle(
+                    //     color: Colors.blue.shade700,
+                    //     fontSize: 15,
+                    //     fontWeight: FontWeight.w600,
+                    //   ),
+                    // ),
 
-                    /// ⭐ التقييم (محسن)
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.85),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Row(
-                        children: const [
-                          Icon(Icons.star, size: 16, color: Colors.orange),
-                          SizedBox(width: 6),
-                          Text(
-                            "4.8",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                            ),
+                    GetBuilder<ReviewController>(
+                      builder: (controller) {
+                        double rating = controller.averageRating;
+
+                        int fullStars = rating.floor(); // النجوم الكاملة
+                        bool hasHalfStar = (rating - fullStars) >= 0.5;
+
+                        return Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                          decoration: BoxDecoration(
+                        //    color: Colors.orange.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(20),
                           ),
-                        ],
-                      ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+
+                              /// ⭐ النجوم
+                              Row(
+                                children: List.generate(5, (index) {
+                                  if (index < fullStars) {
+                                    return const Icon(Icons.star,
+                                        size: 16, color: Colors.orange);
+                                  } else if (index == fullStars && hasHalfStar) {
+                                    return const Icon(Icons.star_half,
+                                        size: 16, color: Colors.orange);
+                                  } else {
+                                    return const Icon(Icons.star_border,
+                                        size: 16, color: Colors.orange);
+                                  }
+                                }),
+                              ),
+
+                              const SizedBox(width: 6),
+
+                              /// ⭐ الرقم
+                              Text(
+                                rating.toStringAsFixed(1),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+
+                              const SizedBox(width: 4),
+
+                              // /// ⭐ عدد التقييمات
+                              // Text(
+                              //   "(${controller.totalReviews})",
+                              //   style: TextStyle(
+                              //     fontSize: 12,
+                              //     color: Colors.grey.shade600,
+                              //   ),
+                              // ),
+                            ],
+                          ),
+                        );
+                      },
                     ),
+                    /// ⭐ التقييم (محسن)
+                    // Container(
+                    //   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                    //   decoration: BoxDecoration(
+                    //     color: Colors.white.withOpacity(0.85),
+                    //     borderRadius: BorderRadius.circular(20),
+                    //   ),
+                    //   child: Row(
+                    //     children: const [
+                    //       Icon(Icons.star, size: 16, color: Colors.orange),
+                    //       SizedBox(width: 6),
+                    //       Text(
+                    //         "4.8",
+                    //         style: TextStyle(
+                    //           fontWeight: FontWeight.w500,
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

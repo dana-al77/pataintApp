@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 import '../../../core/constant/color.dart';
+import '../clipper/header_clipper_medical.dart';
 import '../clipper/profile_clipper.dart';
 
 class ProfileHeaderBackground extends StatelessWidget {
@@ -11,19 +12,21 @@ class ProfileHeaderBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipPath(
-      clipper: MyWaveClipper(),
+      clipper: HeaderClipper(),
       child: Stack(
         children: [
           Container(
-            height: 240,
+            height: 280,
             decoration:  BoxDecoration(
               gradient: LinearGradient(
-                colors: [
-                  AppColor.secondyColor.withOpacity(0.7),
-                  AppColor.secondyColor.withOpacity(0.3),
+              colors: [
+                AppColor.secondyColor,
+                AppColor.blueColor
+                // Color(0xff408bcf),
+                // Color(0xff408bcf)
                 ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
               ),
             ),
           ),

@@ -1,59 +1,9 @@
-// import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
-// import 'package:patientapp/controller/home_controller.dart';
-//
-// class ProfileTopBar extends StatelessWidget {
-//   const ProfileTopBar({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     Get.put(HomeControllerImp());
-//     return GetBuilder<HomeControllerImp>(
-//       builder: (controller) {
-//         return Padding(
-//           padding: const EdgeInsets.symmetric(horizontal: 16),
-//           child: Row(
-//             children: [
-//               // const Icon(Icons.arrow_back, color: Colors.white),
-//               // const SizedBox(width: 10),
-//               const Text(
-//                 "الحساب الشخصي",
-//                 style: TextStyle(
-//                   fontSize: 18,
-//                   fontWeight: FontWeight.bold,
-//                   color: Colors.white,
-//                 ),
-//               ),
-//               const Spacer(),
-//               IconButton(
-//                 icon: const Icon(Icons.logout, color: Colors.white,size: 30,),
-//                 onPressed: () {
-//                   Get.defaultDialog(
-//                     title: "تسجيل الخروج",
-//                     middleText: "هل أنت متأكد؟",
-//                     textCancel: "إلغاء",
-//                     textConfirm: "خروج",
-//                     confirmTextColor: Colors.white,
-//                     onConfirm: () {
-//                    controller.logout();
-//                     },
-//                   );
-//                 },
-//               )
-//
-//             ],
-//           ),
-//         );
-//       }
-//     );
-//   }
-// }
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:patientapp/controller/home_controller.dart';
 
-import '../../../core/constant/color.dart';
-import '../appiontement/dilaog.dart';
+import '../../../controller/profile/profile_controller.dart';
+import '../../screen/profile/edit_profile_page.dart';
 
 class ProfileTopBar extends StatelessWidget {
   final bool isEditPage; // 🔥 هل الصفحة تعديل؟
@@ -65,7 +15,7 @@ class ProfileTopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(HomeControllerImp());
+    final controller = Get.put(ProfileController());
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -86,34 +36,20 @@ class ProfileTopBar extends StatelessWidget {
           /// 🎯 الأيقونة حسب الصفحة
           IconButton(
             icon: Icon(
-              isEditPage ? Icons.arrow_back : Icons.logout,
+              isEditPage ? Icons.arrow_forward_ios : Icons.edit,
               color: Colors.white,
-              size: 30,
+              size: 25,
             ),
             onPressed: () {
               if (isEditPage) {
                 /// 🔙 رجوع
                 Get.back();
               } else {
-                showCustomConfirmDialog(
-                  title: "تسجيل الخروج",
-                  message: "هل تريدين الخروج من حسابكِ؟",
-                  icon: Icons.logout_rounded,
-                  iconColor: AppColor.secondyColor,
-                  confirmBtnText: "خروج",
-                  onConfirm: () => controller.logout(),
+                Get.to(
+                      () => const EditProfilePage(),
+                  arguments: controller.profileModel,
                 );
-                /// 🚪 تسجيل خروج
-                // Get.defaultDialog(
-                //   title: "تسجيل الخروج",
-                //   middleText: "هل أنت متأكد؟",
-                //   textCancel: "إلغاء",
-                //   textConfirm: "خروج",
-                //   confirmTextColor: Colors.white,
-                //   onConfirm: () {
-                //     controller.logout();
-                //   },
-                // );
+
               }
             },
           ),

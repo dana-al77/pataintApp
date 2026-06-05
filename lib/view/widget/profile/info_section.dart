@@ -29,6 +29,14 @@ class InfoSection extends StatelessWidget {
             ),
 
             const divider(),
+            InfoRowTile(
+              icon: Icons.transgender_outlined,
+              iconColor: Colors.yellow,
+              iconBackground: Colors.yellow.withOpacity(0.1),
+              title: "الجنس",
+              value: controller.profileModel?.gender ?? "",
+            ),
+            const divider(),
 
             InfoRowTile(
               icon: Icons.location_city,
@@ -59,8 +67,8 @@ class InfoSection extends StatelessWidget {
           
             InfoRowTile(
               icon: Icons.phone,
-              iconColor: Colors.red,
-              iconBackground: Color(0x1AFF0000).withOpacity(0.1),
+              iconColor: Colors.blue,
+              iconBackground: Colors.blue.withOpacity(0.1),
               title: "رقم الطوارئ",
               value:  controller.profileModel?.patient?.emergencyContact ?? "-",
             ),

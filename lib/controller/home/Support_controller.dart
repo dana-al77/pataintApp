@@ -24,7 +24,25 @@ class SupportControllerImp extends SupportController {
   SupportData supportData = SupportData(Get.find());
 
   List<SupportModel> data = [];
+  // 👇 داتا وهمية مؤقتة
+  final dummyData = [
+    {
+      "title": "التعامل مع القلق",
+      "content": "خذ نفس عميق وابتعد عن مصادر التوتر لفترة قصيرة.",
+      "image": "https://images.unsplash.com/photo-1493836512294-502baa1986e2"
+    },
+    {
+      "title": "تحسين المزاج",
+      "content": "مارس المشي يومياً لمدة 20 دقيقة.",
+      "image": "https://images.unsplash.com/photo-1506126613408-eca07ce68773"
+    },
+    {
+      "title": "نوم أفضل",
+      "content": "تجنب الهاتف قبل النوم بساعة.",
+      "image": "https://images.unsplash.com/photo-1517841905240-472988babdf9"
+    },
 
+  ];
 
   @override
   getPsychSupport() async {
@@ -45,8 +63,8 @@ class SupportControllerImp extends SupportController {
         data.addAll(dataList.map((e) => SupportModel.fromJson(e)));
         print("valid");
       } else {
-        statusRequest = StatusRequest.failure;
-
+        //statusRequest = StatusRequest.failure;
+        dummyData;
       }
     }
     update();

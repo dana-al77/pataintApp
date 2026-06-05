@@ -15,7 +15,7 @@ class MedicalTestData {
     required List<File> files
   }) async {
 
-    var response = await crud.postDataWithFileAndToken(
+    var response = await crud.postDataUpLoad(
       AppLink.upLoadMedical,
       {
         //"medical_record_id": medicalRecordId,
@@ -23,7 +23,7 @@ class MedicalTestData {
         "notes": notes,
       },
       //file,
-      files.first,
+      files,
       "file", // 👈 نفس اسم الحقل بالبوستمان
     );
 

@@ -1,53 +1,85 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:patientapp/link_api.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../controller/home/Support_controller.dart';
+import '../../../../core/class/handling_data_view.dart';
 import '../../../../core/class/statusrequest.dart';
-import '../../../../core/constant/color.dart';
-import '../../../../data/model/support_model.dart';
+import '../../handle_empty.dart';
+import '../../skelton/psychological_support_skeleton.dart';
 import 'PsychologicalSupport_card.dart';
-//
-//
-// class ListMPsychologicalSupport extends StatelessWidget {
-//   const ListMPsychologicalSupport({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     Get.put(SupportControllerImp());
-//
-//     return GetBuilder<SupportControllerImp>(
-//       builder: (controller) {
-//         // 👇 معالجة حالات التحميل (اختياري بس مهم)
-//         if (controller.statusRequest == StatusRequest.loading) {
-//           return const Center(child: CircularProgressIndicator());
-//         }
-//
-//         if (controller.data.isEmpty) {
-//           return const Center(child: Text("لا توجد دعم  حالياً"));
-//         }
-//
-//         return SizedBox(
-//           height: 175,
-//           child: ListView.builder(
-//             scrollDirection: Axis.horizontal,
-//             itemCount: controller.data.length,
-//             itemBuilder: (context, index) {
-//               final supp = controller.data[index];
-//
-//               return PsychologicalSupportCard(
-//                 title: supp.title!,
-//                 content: "${supp.content}",
-//                 createdBy: 'د.${supp.createdBy}',
-//                 image: '',              );
-//             },
-//           ),
-//         );
-//       },
-//     );
-//   }
-// }
 
+class ListMPsychologicalSupport extends StatelessWidget {
+  const ListMPsychologicalSupport({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    Get.put(SupportControllerImp());
+
+    return GetBuilder<SupportControllerImp>(
+      builder: (controller) {
+        return HandlingDataRequest(
+          statusRequest: controller.statusRequest,
+
+          // ✅ Skeleton Loading
+          loadingWidget: SizedBox(
+            height: 320.h,
+            child: ListView.builder(
+              scrollDirection: Axis.vertical,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: 3,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: EdgeInsets.only(right: 12.w),
+                  child: const PsychologicalSupportSkeleton(),
+                );
+              },
+            ),
+          ),
+
+          // ✅ Retry
+          onRetry: () {
+            controller.getPsychSupport();
+          },
+
+          // ✅ Main Content
+          widget: controller.data.isEmpty
+              ? const EmptyStateWidget(
+            title: "لا يوجد دعم نفسي حالياً",
+            subtitle: "حاول لاحقاً",
+            icon: Icons.psychology_alt_outlined,
+          )
+              : SizedBox(
+            height: 175.h,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              physics: const BouncingScrollPhysics(),
+              itemCount: controller.data.length,
+              itemBuilder: (context, index) {
+                final supp = controller.data[index];
+
+                return Padding(
+                  padding: EdgeInsets.only(right: 12.w),
+                  child: SizedBox(
+                    width: 320.w,
+                    child: PsychologicalSupportCard(
+                      supportModel: supp,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+
+
+
+/*
 
 class ListMPsychologicalSupport extends StatelessWidget {
   const ListMPsychologicalSupport({super.key});
@@ -107,3 +139,4 @@ class ListMPsychologicalSupport extends StatelessWidget {
     );
   }
 }
+ */

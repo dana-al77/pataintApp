@@ -4,8 +4,10 @@ import 'package:patientapp/core/constant/color.dart';
 import 'package:patientapp/view/widget/home/centerInfo/services_crad.dart';
 import '../../../../controller/home/center_info.dart';
 import '../../../../core/class/statusrequest.dart';
+import '../section_title.dart';
 import 'build_card.dart';
 import 'cente_info_card.dart';
+import 'new/header.dart';
 
 class ListCenterInfo extends StatelessWidget {
   const ListCenterInfo({super.key});
@@ -27,55 +29,95 @@ class ListCenterInfo extends StatelessWidget {
           return SingleChildScrollView(
             child: Column(
               children: [
-
-                /// 🖼 صورة الهيدر
-                Container(
-                  margin: const EdgeInsets.all(16),
-                  height: 180,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    image: const DecorationImage(
-                      image: AssetImage("assets/images/clinic.jpg"), // غيرها
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+                CenterHeaderWidget(
+                  centerName: "عيادة الرواد الاستشارية", // Static
+                  location: model.location ?? "الموقع غير محدد", // Dynamic من السيرفر
                 ),
 
-                /// 📍 الموقع
-                buildCard(
-                  icon: Icons.location_on,
-                  title: "الموقع",
-                  subtitle: model.location ?? "",
-                ),
+            // داخل دالة الـ build الخاصة بالصفحة:
+                SizedBox(height: 10,),
+            buildServicesCard(context,model.services ?? ""),
 
-                /// 🕒 ساعات العمل
-                buildCard(
-                  icon: Icons.access_time,
-                  title: "ساعات العمل",
-                  subtitle: model.openingHours ?? "",
+                OpeningHoursCard(
+                  openingHours: model.openingHours ?? {},
                 ),
-
-                /// 🗺 الخريطة
-                buildCard(
-                  icon: Icons.map,
-                  title: "العنوان على الخريطة",
-                  subtitle: model.addressOnMap ?? "",
-                ),
-
-                /// 🏢 الفروع
-                buildCard(
-                  icon: Icons.account_tree,
-                  title: "الفروع",
-                  subtitle: model.branches ?? "",
-                ),
-
-                /// ❤️ الخدمات
-                buildServicesCard(model.services ?? ""),
+                // استدعاء دالة الفروع بداخل GetBuilderbuildBranchesSection(model.branches ?? {}),
+                SizedBox(height: 100,),
               ],
+
             ),
           );
         },
       ),
+    );
+  }
+  Widget buildBranchesSection(Map<String, String> branches) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          child: SectionTitle(title: "الفروع التابعة"),
+        ),
+
+        // نستخدم .entries.map لأننا نتعامل مع Map
+        ...branches.entries.map((entry) => Container(
+          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+          padding: const EdgeInsets.all(15),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(18),
+            border: Border.all(color: AppColor.secondyColor.withOpacity(0.1)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.03),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: AppColor.secondyColor.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(Icons.location_on_outlined,
+                    color: AppColor.secondyColor, size: 22),
+              ),
+              const SizedBox(width: 15),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // اسم الفرع (Key)
+                    Text(
+                      entry.key,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    // عنوان الفرع (Value)
+                    Text(
+                      entry.value,
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Colors.grey.shade600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(Icons.arrow_forward_ios, size: 14, color: Colors.grey.shade400),
+            ],
+          ),
+        )),
+      ],
     );
   }
 }

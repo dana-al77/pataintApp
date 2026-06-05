@@ -147,7 +147,64 @@ catch(e){
   }
 
 
+  Future<Either<StatusRequest, Map>> postDataUpLoad(
+      String linkUrl,
+      Map data,
+      List<File> imageFiles,
+      String imageKey,
+      ) async {
+    try {
 
+      String? token =
+      myServices.sharedPreferences.getString("token");
+
+      var request =
+      http.MultipartRequest("POST", Uri.parse(linkUrl));
+
+      // fields
+      data.forEach((key, value) {
+        request.fields[key] = value.toString();
+      });
+
+      // files
+      for (var file in imageFiles) {
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            imageKey,
+            file.path,
+          ),
+        );
+      }
+
+      request.headers.addAll({
+        "Accept": "application/json",
+        "Authorization": "Bearer $token",
+      });
+
+      var streamed = await request.send();
+
+      var response =
+      await http.Response.fromStream(streamed);
+
+      print(response.body);
+
+      if (streamed.statusCode >= 200 &&
+          streamed.statusCode < 300) {
+
+        return Right(jsonDecode(response.body));
+
+      } else {
+
+        return Left(StatusRequest.serverfailure);
+      }
+
+    } catch (e) {
+
+      print(e);
+
+      return Left(StatusRequest.serverExption);
+    }
+  }
   Future<Either<StatusRequest, Map>> DeleteData(String linkurl) async {
     try {
       String? token = myServices.sharedPreferences.getString("token"); // ✅ هون الصح

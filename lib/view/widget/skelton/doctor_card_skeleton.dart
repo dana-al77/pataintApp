@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../core/constant/app_shimmer.dart';
-import '../../shimmer/shimmer.dart';
+import '../../../core/constant/app_shimmer.dart';
+import '../shimmer/shimmer.dart';
 
 class DoctorCardSkeleton extends StatelessWidget {
   const DoctorCardSkeleton({super.key});

@@ -19,6 +19,7 @@ import 'package:patientapp/view/screen/qr/qr_home_view.dart';
 import 'package:patientapp/view/screen/upload_medical.dart';
 import 'package:patientapp/view/widget/home/centerInfo/list_center_info.dart';
 import 'package:patientapp/view/widget/home/doctor/doctor_page.dart';
+import 'package:patientapp/view/widget/profile/edit_button.dart';
 
 import 'core/constant/routes.dart';
 import 'core/middleware/my_middleware.dart';
@@ -55,7 +56,12 @@ List<GetPage<dynamic>>? routes = [
   GetPage(name: AppRoute.AllDoctor, page: () =>  DoctorsPage()),
   GetPage(name: AppRoute.CenterInfo, page: () =>  ListCenterInfo()),
   GetPage(name: AppRoute.notification, page: () =>  Notificationview()),
+
+  //////////////  profile
   GetPage(name: AppRoute.getProfile, page: () =>  ProfilePage()),
+  GetPage(name: AppRoute.EditProfile, page: () =>  EditProfileButton()),
+
+
 
   GetPage(name: AppRoute.upLoadMedical, page: () =>  UploadMedical()),
   GetPage(name: AppRoute.medicalQR, page: () =>  MedicalQrView()),

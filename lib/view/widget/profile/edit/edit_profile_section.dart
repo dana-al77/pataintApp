@@ -43,27 +43,7 @@ class EditProfileSection extends StatelessWidget {
                 const divider(),
 
                 /// ================= GOVERNORATE =================
-                // InfoRowTile(
-                //   icon: Icons.location_city,
-                //   iconColor: Colors.orange,
-                //   iconBackground: Colors.orange.withOpacity(0.1),
-                //   title: "المحافظة",
-                //   value: "",
-                //
-                //   isEditing: true,
-                //
-                //   editableChild: DropdownButtonFormField<String>(
-                //     value: controller.selectedGovernorate,
-                //     items: controller.governoratesAndCities.keys
-                //         .map((e) => DropdownMenuItem(
-                //       value: e,
-                //       child: Text(e),
-                //     ))
-                //         .toList(),
-                //     onChanged: controller.changeGovernorate,
-                //     decoration: const InputDecoration(border: InputBorder.none),
-                //   ),
-                // ),
+
                 InfoRowTile(
                   icon: Icons.location_city,
                   iconColor: Colors.orange,
@@ -103,27 +83,7 @@ class EditProfileSection extends StatelessWidget {
 
                 /// ================= CITY =================
                 ///
-                // InfoRowTile(
-                //   icon: Icons.public,
-                //   iconColor: Colors.green,
-                //   iconBackground: Colors.green.withOpacity(0.1),
-                //   title: "البلدة",
-                //   value: "",
-                //
-                //   isEditing: true,
-                //
-                //   editableChild: DropdownButtonFormField<String>(
-                //     value: controller.selectedCity,
-                //     items: controller.cities
-                //         .map((e) => DropdownMenuItem(
-                //       value: e,
-                //       child: Text(e),
-                //     ))
-                //         .toList(),
-                //     onChanged: controller.changeCity,
-                //     decoration: const InputDecoration(border: InputBorder.none),
-                //   ),
-                // ),
+
                 InfoRowTile(
                   icon: Icons.public,
                   iconColor: Colors.green,
@@ -162,6 +122,29 @@ class EditProfileSection extends StatelessWidget {
                 const divider(),
 
                 /// ================= PHONE =================
+                    InfoRowTile(
+                                  icon: Icons.phone,
+                                  iconColor: Colors.red,
+                                  iconBackground: const Color(0x1AFF0000),
+                                  title: "رقم الهاتف",
+                                  value: controller.emergencyContact.text,
+
+                                  isEditing: controller.editingField == "phone",
+
+                                  editableChild: TextField(
+                                    controller: controller.phone,
+                                    keyboardType: TextInputType.phone,
+                                    autofocus: true,
+                                    decoration: const InputDecoration(border: InputBorder.none),
+                                    onSubmitted: (_) => controller.stopEditing(),
+                                  ),
+
+                                  trailingIcon: Icons.edit,
+                                  onTrailingTap: () {
+                                    controller.startEditing("phone");
+                                  },
+                                ),
+                const divider(),
                 InfoRowTile(
                   icon: Icons.phone,
                   iconColor: Colors.red,

@@ -59,9 +59,13 @@ class QrHeader extends StatelessWidget {
                     ),
                   ),
                 ),
-
-                // 3. سهم العودة على اليمين
-                _circleIcon(Icons.arrow_forward_ios),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                    // أو Get.back();
+                  },
+                  child: _circleIcon(Icons.arrow_forward_ios),
+                ),
               ],
             ),
 

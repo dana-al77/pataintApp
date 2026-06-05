@@ -12,7 +12,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put(HomeScreenControllerImp());
-    Get.put(NotificationController());
+   // Get.put(NotificationController());
     return GetBuilder<HomeScreenControllerImp>(
       builder: (controller) => WillPopScope(
         onWillPop: alertExitApp,

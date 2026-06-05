@@ -50,9 +50,9 @@ class ReviewData {
   deleteReview({
     required String reviewId,
   }) async {
-    var response = await crud.PostDataWithToken(
+    var response = await crud.DeleteData(
       "${AppLink.deleteReview}/$reviewId",
-      {},
+
     );
 
     return response.fold((l) => l, (r) => r);

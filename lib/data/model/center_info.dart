@@ -1,6 +1,8 @@
 class CenterInfo {
   String? location;
-  String? openingHours;
+ // String? openingHours;
+
+  Map<String, String>? openingHours;
   String? addressOnMap;
   String? branches;
   String? services;
@@ -15,7 +17,10 @@ class CenterInfo {
 
   CenterInfo.fromJson(Map<String, dynamic> json) {
     location = json['location'];
-    openingHours = json['opening_hours'];
+    openingHours = json['opening_hours'] != null
+        ? Map<String, String>.from(json['opening_hours'])
+        : {};
+    //openingHours = json['opening_hours'];
     addressOnMap = json['address_on_map'];
     branches = json['branches'];
     services = json['services'];

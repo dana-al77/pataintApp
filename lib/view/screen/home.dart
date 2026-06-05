@@ -42,6 +42,7 @@ class Home extends StatelessWidget {
             //     },
             //   ),
             // ),
+
             DoctorConsultationCard(),
             SectionTitle(title: "الخدمات المتاحة"),
             ListServicesHome(),

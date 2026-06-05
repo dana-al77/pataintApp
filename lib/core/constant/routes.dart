@@ -20,6 +20,8 @@ class AppRoute {
   static const String notification = "/notification";
 
   static const String getProfile = "/getProfile";
+  static const String EditProfile = "/editprofile";
+
   static const String upLoadMedical = "/uploadmedical";
 
   static const String medicalQR = "/medicalQr";

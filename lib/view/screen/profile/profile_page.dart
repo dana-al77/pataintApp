@@ -9,6 +9,7 @@ import '../../widget/clipper/profile_clipper.dart';
 import '../../widget/profile/emergency_card.dart';
 import '../../widget/profile/header_background.dart';
 import '../../widget/profile/info_section.dart';
+import '../../widget/profile/logout.dart';
 import '../../widget/profile/profie_card.dart';
 import '../../widget/profile/topBar.dart';
 import '../../widget/profile/verified_account.dart';
@@ -25,40 +26,43 @@ class ProfilePage extends StatelessWidget {
       body: GetBuilder<ProfileController>(
         builder: (controller) => handlingDataView(
           statusRequest: controller.statusRequest,
-          widget: Stack(
-            children: [
-              const ProfileHeaderBackground(),
+          widget: SingleChildScrollView(
+            child: Stack(
+              children: [
+                const ProfileHeaderBackground(),
+            
+                SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const SizedBox(height:40),
+            
+                     // const ProfileTopBar(),
+                      const ProfileTopBar(
+                        isEditPage: false,
+                      ),
+                      const SizedBox(height: 8),
+            
+                      ProfileCard(controller: controller),
 
-              SingleChildScrollView(
-                child: Column(
-                  children: [
-                    const SizedBox(height: 40),
+                      const SizedBox(height: 8),
 
-                   // const ProfileTopBar(),
-                    const ProfileTopBar(
-                      isEditPage: false,
-                    ),
-                    const SizedBox(height: 30),
-
-                    ProfileCard(controller: controller),
-
-                    const SizedBox(height: 20),
-
-                    InfoSection(controller: controller),
-
-                    const SizedBox(height: 10),
-
-                  //  EmergencyCard(controller: controller),
-
-                   // const SizedBox(height: 10),
-
-                    const VerifiedSection(),
-
-                    const SizedBox(height: 30),
-                  ],
+                      InfoSection(controller: controller),
+            
+                      const SizedBox(height: 10),
+            
+                    //  EmergencyCard(controller: controller),
+            
+                     // const SizedBox(height: 10),
+                      Logout(),
+                      const SizedBox(height: 10),
+                      const VerifiedSection(),
+            
+                      const SizedBox(height: 100),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

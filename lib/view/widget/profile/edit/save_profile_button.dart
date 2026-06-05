@@ -15,11 +15,11 @@ class SaveProfileButton extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: SizedBox(
-        width: double.infinity,
+        width: 200,
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColor.secondyColor,
-            padding: const EdgeInsets.all(14),
+            padding: const EdgeInsets.all(9),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
             ),
@@ -28,8 +28,8 @@ class SaveProfileButton extends StatelessWidget {
             controller.updateProfile();
           },
           child: const Text(
-            "حفظ التعديلات",
-            style: TextStyle(color: Colors.white),
+            "حفظ ",
+            style: TextStyle(color: Colors.white,fontSize: 20,fontWeight: FontWeight.bold),
           ),
         ),
       ),
