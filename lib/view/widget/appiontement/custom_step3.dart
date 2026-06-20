@@ -8,6 +8,9 @@ class CustomStep3 extends StatelessWidget {
   final TextEditingController controller;
   final int maxLines;
 
+  /// Validation
+  final String? Function(String?)? validator;
+
   const CustomStep3({
     super.key,
     required this.label,
@@ -16,6 +19,7 @@ class CustomStep3 extends StatelessWidget {
     required this.iconColor,
     required this.controller,
     this.maxLines = 1,
+    this.validator,
   });
 
   @override
@@ -37,7 +41,7 @@ class CustomStep3 extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // العنوان مع الأيقونة
+          /// العنوان مع الأيقونة
           Row(
             children: [
               Container(
@@ -46,7 +50,11 @@ class CustomStep3 extends StatelessWidget {
                   color: iconColor.withOpacity(0.1),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(icon, color: iconColor, size: 20),
+                child: Icon(
+                  icon,
+                  color: iconColor,
+                  size: 20,
+                ),
               ),
               const SizedBox(width: 10),
               Text(
@@ -59,24 +67,60 @@ class CustomStep3 extends StatelessWidget {
               ),
             ],
           ),
+
           const SizedBox(height: 12),
-          // حقل الإدخال
-          TextField(
+
+          /// حقل الإدخال
+          TextFormField(
             controller: controller,
             maxLines: maxLines,
+
+            /// التحقق المباشر أثناء الكتابة
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+
+            validator: validator,
+
             decoration: InputDecoration(
               hintText: hint,
-              hintStyle: TextStyle(color: Colors.grey[400], fontSize: 14),
+              hintStyle: TextStyle(
+                color: Colors.grey[400],
+                fontSize: 14,
+              ),
               filled: true,
               fillColor: Colors.white,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 12,
+              ),
+
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(15),
-                borderSide: BorderSide(color: Colors.grey.shade200),
+                borderSide: BorderSide(
+                  color: Colors.grey.shade200,
+                ),
               ),
+
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(15),
-                borderSide: const BorderSide(color: Color(0xFF00B4D8), width: 1.5),
+                borderSide: const BorderSide(
+                  color: Color(0xFF00B4D8),
+                  width: 1.5,
+                ),
+              ),
+
+              errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: const BorderSide(
+                  color: Colors.red,
+                ),
+              ),
+
+              focusedErrorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: const BorderSide(
+                  color: Colors.red,
+                  width: 1.5,
+                ),
               ),
             ),
           ),

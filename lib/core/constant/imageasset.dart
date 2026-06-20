@@ -29,7 +29,7 @@ class AppImageAsset {
   static const String logoo = "$rootImages/logoo.png";
 
 /////////  forget password
-  static const String  forgetPass = "$rootImages/forgetpass.png";
+  static const String  forgetPass = "$rootImages/ForgetPasssword.png";
 
 
 

@@ -91,7 +91,7 @@ void showReviewDialog({
               /// ⭐ STARS
               GetBuilder<ReviewController>(
                 builder: (_) {
-
+                  print("🔥 DIALOG REBUILD");
                   return Row(
 
                     mainAxisAlignment:
@@ -265,15 +265,20 @@ void showReviewDialog({
                               success =
                               await ctrl.addReview(doctorId);
                             }
-
+                            print("SUCCESS = $success");
                             if (success) {
 
+                              Get.back();
 
+                              await Future.delayed(
+                                const Duration(milliseconds: 200),
+                              );
 
+                              await ctrl.getReviews(doctorId);
+
+                              ctrl.reviewId = null;
                               ctrl.rating = 0;
                               ctrl.comment.clear();
-                              Get.back();
-                              await ctrl.getReviews(doctorId);
                             }
                           },
 

@@ -215,9 +215,9 @@ class ChatController extends GetxController {
     final controller = Get.find<ViewCenetrInfoControllerImp>();
     final center = controller.data.first;
 
-    addMessage(ChatMessage(
-      text: "🕒 أوقات العمل:\n${center.openingHours ?? 'غير متوفر'}",
-    ));
+    // addMessage(ChatMessage(
+    //  // text: "🕒 أوقات العمل:\n${center.openingHours ?? 'غير متوفر'}",
+    // ));
   }
 
   void showServices() {

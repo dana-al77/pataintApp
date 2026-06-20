@@ -25,14 +25,18 @@ class ChatHeader extends StatelessWidget {
           ),
           const SizedBox(width: 10),
           const Column(
-            mainAxisAlignment: MainAxisAlignment.center, // 👈 مهم
+// 👈 يوزع المساحة المتاحة في المنتصف بالتساوي بين العناصر وفوقها وتحتها
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("مرحباً 👋",
-                  style: TextStyle(color: Colors.white, fontSize: 17,fontWeight: FontWeight.bold)),
-              Text("مساعد الحجز الذكي",
-                  style: TextStyle(color: Colors.white70, fontSize: 15)),
-            ],
+              children: [
+                Flexible( // 👈 يحمي النص من تجاوز الحدود
+                  child: Text("مرحباً 👋", style: TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.bold)),
+                ),
+                const SizedBox(height: 4),
+                Flexible( // 👈 يحمي النص من تجاوز الحدود
+                  child: Text("مساعد الحجز الذكي", style: TextStyle(color: Colors.white70, fontSize: 15)),
+                ),
+              ],
           ),
           const Spacer(),
           IconButton(

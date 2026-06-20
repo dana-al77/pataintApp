@@ -140,16 +140,21 @@ class _NotificationviewState extends State<Notificationview> {
                        width: 55,
                        height: 55,
                        decoration: BoxDecoration(
-                         color: const Color(0xffE8F7F5),
+                         color: controller.getNotificationBackgroundColor(
+                           notif['type'],
+                         ),
                          borderRadius: BorderRadius.circular(18),
                        ),
-                       child: const Icon(
-                         Icons.notifications_active_outlined,
-                         color: Color(0xff1EB980),
+                       child: Icon(
+                         controller.getNotificationIcon(
+                           notif['type'],
+                         ),
+                         color: controller.getNotificationColor(
+                           notif['type'],
+                         ),
                          size: 28,
                        ),
                      ),
-
                      const SizedBox(width: 14),
 
                      /// Content
@@ -206,7 +211,9 @@ class _NotificationviewState extends State<Notificationview> {
                                ),
                                const SizedBox(width: 5),
                                Text(
-                                 notif['created_at'] ?? 'منذ دقيقة',
+                                 controller.getTimeAgo(
+                                   notif['created_at'] ?? '',
+                                 ),
                                  style: TextStyle(
                                    fontSize: 12,
                                    color: Colors.grey.shade500,

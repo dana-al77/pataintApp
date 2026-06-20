@@ -210,17 +210,14 @@ class _DoctorDetailsPageState extends State<DoctorDetailsPage>
     final bool isUnselected = tabController.index != index;
 
     return Tab(
-      // 👇 قفلنا الارتفاع بـ 45 بكسل ثابتين للكل لمنع أي تغيير بالحجم
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
         alignment: Alignment.center,
         width: double.infinity,
         height: double.infinity,
-        // 👇 مسافة جانبية ثابتة وموحدة بين الأزرار لتبتعد عن بعضها بشكل منظم
         margin: const EdgeInsets.symmetric(horizontal: 6),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(50),
-          // البوردر ثابت الحجم (1.2) دائماً، التغير فقط باللون لمنع أي اهتزاز بكسل واحد
           border: Border.all(
             color: isUnselected
                 ? Colors.grey.withOpacity(0.35)

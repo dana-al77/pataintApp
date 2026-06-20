@@ -23,7 +23,7 @@ class CenterHeaderWidget extends StatelessWidget {
 
         // القسم العلوي: البطاقة المعلوماتية العائمة
         Positioned(
-          bottom: 10, // لإعطاء تأثير البروز خارج حدود الصورة
+          bottom: 3, // لإعطاء تأثير البروز خارج حدود الصورة
           left: 20,
           right: 20,
           child: _buildFloatingInfoCard(),
@@ -36,98 +36,111 @@ class CenterHeaderWidget extends StatelessWidget {
 // مكوّن الصورة مع طبقة اللون (Overlay)
   Widget _buildMainImage() {
     return Container(
-      height: 240,
+      height: 200,
       width: double.infinity,
-      decoration: BoxDecoration(
-        // borderRadius: const BorderRadius.only(
-        //   bottomLeft: Radius.circular(35),
-        //   bottomRight: Radius.circular(35),
-        // ),
-        image: DecorationImage(
-          image: AssetImage(imagePath),
-          fit: BoxFit.cover,
-          // تلوين الصورة بطبقة زرقاء طبية شفافة
-          colorFilter: ColorFilter.mode(
-            AppColor.black.withOpacity(0.004), // درجة الشفافية
-            BlendMode.darken, // طريقة دمج اللون مع الصورة
-          ),
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(35),
+          bottomRight: Radius.circular(35),
+        ),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            AppColor.secondyColor,
+            AppColor.blueColor
+          ],
         ),
       ),
-      // هذا الـ Container الداخلي لإضافة تدرج (Gradient) خفيف ليبرز زر الرجوع
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(35),
-            bottomRight: Radius.circular(35),
+      child: Stack(
+        children: [
+          Positioned(
+            top: -50,
+            right: -30,
+            child: Container(
+              width: 180,
+              height: 180,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white.withOpacity(0.2),
+              ),
+            ),
           ),
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Colors.black.withOpacity(0.2), // تظليل علوي للأيقونات
-              Colors.transparent,
-              AppColor.secondyColor.withOpacity(0.2), // تظليل سفلي خفيف
-            ],
+
+          Positioned(
+            top: 60,
+            left: -40,
+            child: Container(
+              width: 120,
+              height: 120,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white.withOpacity(0.2),
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
   // مكوّن البطاقة العائمة
   Widget _buildFloatingInfoCard() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          centerName,
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+     //   color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        // boxShadow: [
+        //   BoxShadow(
+        //    // color: Colors.black.withOpacity(0.12),
+        //     blurRadius: 20,
+        //     offset: const Offset(0, 8),
+        //   ),
+        // ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            centerName,
+            style: const TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              color: AppColor.primaryColor,
+            ),
           ),
-        ),
-        const SizedBox(height: 8),
-        Row(
-          children: [
-            const Icon(
-              Icons.location_on_outlined,
+
+          const SizedBox(height: 8),
+
+          Text(
+            "رعاية صحية متكاملة وخدمات طبية متميزة",
+            style: TextStyle(
               color: AppColor.white,
-              size: 18,
+              fontSize: 14,
             ),
-            const SizedBox(width: 6),
-            Expanded(
-              child: Text(
-                location,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: AppColor.white,
-                  height: 1.4,
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+          ),
+
+          const SizedBox(height: 15),
+
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 14,
+              vertical: 6,
+            ),
+            decoration: BoxDecoration(
+              color: Colors.green.shade600,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: const Text(
+              "مفتوح الآن",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
               ),
             ),
-          ],
-        ),
-        Row(
-          mainAxisSize: MainAxisSize.min, // مهم جداً عشان الرو نفسه ما ياخد العرض كامل
-          children: [
-            Container(
-              margin: EdgeInsets.all(6.0),
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                color: Color(0xFF2E7D32),
-              ),
-              child: Text(
-                "مفتوح الآن",
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          ],
-        )
-      ],
+          ),
+        ],
+      ),
     );
   }
 }

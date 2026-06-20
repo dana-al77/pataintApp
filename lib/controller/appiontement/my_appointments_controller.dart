@@ -60,18 +60,32 @@ class MyAppointmentsController extends GetxController {
             .map((e) => MyAppointmentModel.fromJson(e))
             .toList();
 
+        // upcomingAppointments = allAppointments
+        //     .where((e) => e.status == "pending")
+        //     .toList();
+        //
+        // completedAppointments = allAppointments
+        //     .where((e) => e.status == "confirmed")
+        //     .toList();
+        //
+        // cancelledAppointments = allAppointments
+        //     .where((e) => e.status == "cancelled")
+        //     .toList();
         upcomingAppointments = allAppointments
-            .where((e) => e.status == "pending")
+            .where(
+              (e) =>
+          e.status == "pending" ||
+              e.status == "confirmed",
+        )
             .toList();
 
         completedAppointments = allAppointments
-            .where((e) => e.status == "confirmed")
+            .where((e) => e.status == "completed")
             .toList();
 
         cancelledAppointments = allAppointments
             .where((e) => e.status == "cancelled")
             .toList();
-
         if (upcomingAppointments.isNotEmpty) {
           nextAppointment = upcomingAppointments.first;
         }

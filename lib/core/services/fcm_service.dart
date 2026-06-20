@@ -46,10 +46,17 @@ class FCMService {
 
       String title = message.notification?.title ?? "";
       String body = message.notification?.body ?? "";
-
       final controller = Get.find<NotificationController>();
 
-      controller.addNotification(title, body);
+      controller.addNotification(
+        title: title,
+        body: body,
+        createdAt: message.data['created_at'] ?? DateTime.now().toString(),
+        type: message.data['type'] ?? 'notification',
+      );
+      // final controller = Get.find<NotificationController>();
+      //
+      // controller.addNotification(title, body);
 
       if (message.notification != null &&
           !controller.isNotificationScreenOpen) {
@@ -88,12 +95,27 @@ class FCMService {
       print("📲 المستخدم ضغط على الإشعار");
       print("📲 المستخدم ضغط على الإشعار");
 
-      String? type = message.data['type'];
+      // String? type = message.data['type'];
+      // String title = message.notification?.title ?? "";
+      // String body = message.notification?.body ?? "";
+      //
+      // final controller = Get.find<NotificationController>();
+      //
+      // controller.addNotification(
+      //   title: title,
+      //   body: body,
+      //   createdAt: message.data['created_at'] ?? DateTime.now().toString(),
+      //   type: message.data['type'] ?? 'notification',
+      // );
       String title = message.notification?.title ?? "";
       String body = message.notification?.body ?? "";
 
-      Get.find<NotificationController>().addNotification(title, body);
-
+      Get.find<NotificationController>().addNotification(
+        title: title,
+        body: body,
+        createdAt: message.data['created_at'] ?? DateTime.now().toString(),
+        type: message.data['type'] ?? 'notification',
+      );
       // 👇 لاحقًا تفتح صفحة
       Get.toNamed(
           AppRoute.notification ,

@@ -15,11 +15,17 @@ class CustomHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       backgroundColor: AppColor.backgroundColor,
       elevation: 0,
+      toolbarHeight: 120,
       scrolledUnderElevation: 0, // 🔥 أهم سطر
       surfaceTintColor: Colors.transparent, // 🔥 يلغي تغيير اللون
       centerTitle: false,
       title: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+        padding: const EdgeInsets.only(
+          top: 20,
+          right: 10,
+          left: 10,
+          bottom: 10,
+        ),
         child: Row(
           // لجعل المحاذاة تبدأ من اليمين (العربي)
           textDirection: TextDirection.rtl,

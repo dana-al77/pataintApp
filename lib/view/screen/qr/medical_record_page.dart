@@ -32,8 +32,12 @@ class MedicalQrView extends StatelessWidget {
       body: SafeArea(
         child: GetBuilder<MedicalQrController>(
           builder: (controller) {
-            return handlingDataView(
-              statusRequest: controller.statusRequest,
+            return
+                HandlingDataRequest(
+                  statusRequest: controller.statusRequest,
+                  onRetry: () {
+                    controller.getMedicalQr();
+                  },
 
               widget: Builder(
                 builder: (context) {

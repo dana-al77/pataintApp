@@ -1,38 +1,52 @@
-class CenterInfo {
-  String? location;
- // String? openingHours;
+import 'package:patientapp/data/model/work_houre.dart';
 
-  Map<String, String>? openingHours;
+class CenterInfo {
+  int? id;
+  String? location;
   String? addressOnMap;
   String? branches;
   String? services;
+  String? contact;
+
+  List<WorkingHour>? workingHours;
 
   CenterInfo({
+    this.id,
     this.location,
-    this.openingHours,
     this.addressOnMap,
     this.branches,
     this.services,
+    this.contact,
+    this.workingHours,
   });
 
   CenterInfo.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
     location = json['location'];
-    openingHours = json['opening_hours'] != null
-        ? Map<String, String>.from(json['opening_hours'])
-        : {};
-    //openingHours = json['opening_hours'];
     addressOnMap = json['address_on_map'];
     branches = json['branches'];
     services = json['services'];
+    contact = json['contact'];
+
+    if (json['working_hours'] != null) {
+      workingHours = <WorkingHour>[];
+
+      json['working_hours'].forEach((v) {
+        workingHours!.add(WorkingHour.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['location'] = location;
-    data['opening_hours'] = openingHours;
-    data['address_on_map'] = addressOnMap;
-    data['branches'] = branches;
-    data['services'] = services;
-    return data;
+    return {
+      'id': id,
+      'location': location,
+      'address_on_map': addressOnMap,
+      'branches': branches,
+      'services': services,
+      'contact': contact,
+      'working_hours':
+      workingHours?.map((e) => e.toJson()).toList(),
+    };
   }
 }

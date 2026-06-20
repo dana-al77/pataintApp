@@ -104,7 +104,7 @@ class DoctorCard extends StatelessWidget {
                     SizedBox(width: 100.w),
                     DoctorInfoRow(
                       icon: Icons.star,
-                      text: "4.8",
+                      text: "${doctor.average_rating ?? 0}",
                       iconColor: Colors.orange,
                     ),
                   ],

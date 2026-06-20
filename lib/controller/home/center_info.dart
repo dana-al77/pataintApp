@@ -4,6 +4,7 @@ import '../../core/class/statusrequest.dart';
 import '../../core/functions/handling_data_controller.dart';
 import '../../data/datasource/remote/center_info_data.dart';
 import '../../data/model/center_info.dart';
+import '../../data/model/work_houre.dart';
 
 abstract class ViewCenetrInfoController extends GetxController {
   getCenterInfo();
@@ -34,21 +35,25 @@ class ViewCenetrInfoControllerImp extends ViewCenetrInfoController {
   List<CenterInfo> getDummyData() {
     return [
       CenterInfo(
+        id: 1,
         location: "مركز الشفاء الطبي",
-        openingHours: {
-          "السبت": "08:00 ص - 10:00 م",
-          "الأحد": "08:00 ص - 10:00 م",
-          "الإثنين": "08:00 ص - 10:00 م",
-          "الثلاثاء": "08:00 ص - 10:00 م",
-          "الأربعاء": "08:00 ص - 10:00 م",
-          "الخميس": "08:00 ص - 08:00 م",
-          "الجمعة": "مغلق",
-        },
         addressOnMap: "دمشق - شارع الثورة",
         branches: "فرع المزة - فرع البرامكة",
-        services: "طب عام - مختبر - نسائية-تحاليل-ايكو-تخطيط قلب-أشعة",
+        services: "طب عام - مختبر - نسائية",
+        contact: "0999999999",
+        workingHours: [
+          WorkingHour(
+            day: "Saturday",
+            startTime: "08:00:00",
+            endTime: "16:00:00",
+            isClosed: false,
+          ),
+          WorkingHour(
+            day: "Friday",
+            isClosed: true,
+          ),
+        ],
       ),
-
     ];
   }
 

@@ -29,8 +29,11 @@ class MyAppointmentsView extends StatelessWidget {
 
       body: GetBuilder<MyAppointmentsController>(
         builder: (controller) {
-      return handlingDataView(
+      return HandlingDataModern(
         statusRequest: controller.statusRequest,
+        onRetry: () {
+          controller.getAppointments();
+        },
         widget: Column(
           children: [
             // شريط التبويبات بستايل الإطار الموحد
@@ -72,7 +75,54 @@ class MyAppointmentsView extends StatelessWidget {
             // --- قائمة الحجوزات المتحركة ---
             Expanded(
               child: controller.currentList.isEmpty
-                  ? const Center(child: Text("لا توجد حجوزات هنا"))
+                  ? Center(
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 30),
+                  padding: const EdgeInsets.all(25),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(24),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.04),
+                        blurRadius: 15,
+                        offset: const Offset(0, 6),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.event_busy_rounded,
+                        size: 70,
+                        color: AppColor.secondyColor,
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      const Text(
+                        "لا توجد حجوزات حالياً",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+
+                      const SizedBox(height: 8),
+
+                      Text(
+                        "عند حجز موعد جديد سيظهر هنا",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.grey.shade600,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              )
                   : ListView.builder(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 itemCount: controller.currentList.length,

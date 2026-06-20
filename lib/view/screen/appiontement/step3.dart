@@ -52,10 +52,23 @@ class Step3Widget extends GetView<FistAppiontController> {
             // ضغط الدم (حقل قصير)
             CustomStep3(
               label: "ضغط الدم",
-              hint: "مثال: 120/80",
+              hint: "120/80",
               icon: Icons.favorite,
               iconColor: Colors.pinkAccent,
               controller: controller.bloodPressure,
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return "يرجى إدخال ضغط الدم";
+                }
+
+                final regex = RegExp(r'^\d{2,3}\/\d{2,3}$');
+
+                if (!regex.hasMatch(value.trim())) {
+                  return "يجب أن يكون بالشكل 120/80";
+                }
+
+                return null;
+              },
             ),
             CustomStep3(
               label: "الحالة الاجتماعية",

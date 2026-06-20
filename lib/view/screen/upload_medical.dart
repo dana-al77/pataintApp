@@ -50,47 +50,7 @@ class UploadMedical extends StatelessWidget {
                 AnalysisTypeSelector(
                   controller: controller, // تمرير الكنترولر المسؤول عن الواجهة
                 ),
-                // TextFormField(
-                //   controller: controller.testType,
-                //   decoration: InputDecoration(
-                //     // 1️⃣ تفعيل اللون الخلفي وجعله فاتحاً جداً مثل منطقة الرفع
-                //     filled: true,
-                //     fillColor: AppColor.secondyColor.withOpacity(0.05),
-                //
-                //     labelText: "نوع التحليل (Test Type)",
-                //     labelStyle: TextStyle(color: AppColor.black.withOpacity(0.5)),
-                //
-                //     // 2️⃣ الحدود في الحالة العادية
-                //     enabledBorder: OutlineInputBorder(
-                //       borderRadius: BorderRadius.circular(15),
-                //       borderSide: BorderSide(
-                //         color: AppColor.secondyColor.withOpacity(0.2), // حدود خفيفة
-                //         width: 1.5,
-                //       ),
-                //     ),
-                //
-                //     // 3️⃣ الحدود عند الضغط على الحقل (Focus)
-                //     focusedBorder: OutlineInputBorder(
-                //       borderRadius: BorderRadius.circular(15),
-                //       borderSide: const BorderSide(
-                //         color: AppColor.secondyColor, // حدود واضحة عند الكتابة
-                //         width: 1.5,
-                //       ),
-                //     ),
-                //
-                //     // 4️⃣ حدود الخطأ (Validation)
-                //     errorBorder: OutlineInputBorder(
-                //       borderRadius: BorderRadius.circular(15),
-                //       borderSide: const BorderSide(color: Colors.redAccent, width: 1.5),
-                //     ),
-                //     focusedErrorBorder: OutlineInputBorder(
-                //       borderRadius: BorderRadius.circular(15),
-                //       borderSide: const BorderSide(color: Colors.redAccent, width: 1.5),
-                //     ),
-                //
-                //     contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
-                //   ),
-                // ),
+
                 const SizedBox(height: 15),
                 /// 2️⃣ عرض الملفات المختارة (التعديل لدعم القائمة)
                 if (controller.selectedFiles.isNotEmpty) ...[

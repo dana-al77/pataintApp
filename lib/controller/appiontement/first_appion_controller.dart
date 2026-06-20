@@ -112,9 +112,36 @@ class FistAppiontController extends GetxController {
   }
   List<String> bloodTypes = ["A+","A-","B+","B-","O+","O-","AB+","AB-"];
 
-  List<String> chronicOptions = ["سكري", "ضغط", "قلب"];
-  List<String> allergyOptions = ["بنسلين", "غبار", "طعام"];
-  List<String> medicationOptions = ["انسولين", "مسكنات", "ضغط"];
+  List<String> chronicOptions = [
+    "سكري",
+    "ضغط الدم",
+    "أمراض القلب",
+    "الربو",
+    "أمراض الكلى",
+    "أمراض الكبد",
+    "الغدة الدرقية",
+    "أخرى",
+  ];
+
+  List<String> allergyOptions = [
+    "البنسلين",
+    "الأسبرين",
+    "الغبار",
+    "حبوب اللقاح",
+    "الحليب",
+    "البيض",
+    "أخرى",
+  ];
+  List<String> medicationOptions = [
+    "الأنسولين",
+    "الضغط",
+    "القلب",
+    "الربو",
+    "الغدة الدرقية",
+    "مميعات الدم",
+    "مكملات غذائية",
+
+  ];
   @override
   void onInit() {
     chronicDiseases = TextEditingController();

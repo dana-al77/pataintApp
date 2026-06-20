@@ -24,7 +24,7 @@ class MedicalQrController extends GetxController {
   MedicalQrModel? medicalQrModel;
 
   final GlobalKey qrKey = GlobalKey();
-
+  String? errorMessage;
   getMedicalQr() async {
 
     statusRequest = StatusRequest.loading;
@@ -38,8 +38,23 @@ class MedicalQrController extends GetxController {
 
       if (response['success'] == true) {
 
-        medicalQrModel =
-            MedicalQrModel.fromJson(response);
+        medicalQrModel = MedicalQrModel.fromJson(response);
+
+      } else if (response['status'] == 404) {
+
+        errorMessage = response['error'];
+
+        Get.defaultDialog(
+          title: "تنبيه",
+          middleText: response['error'] ?? "لا يوجد سجل طبي لهذا المريض",
+          textConfirm: "حسناً",
+          onConfirm: () {
+            Get.back();
+            Get.back(); // إذا بدك ترجع للصفحة السابقة
+          },
+        );
+
+        statusRequest = StatusRequest.none;
 
       } else {
 

@@ -44,8 +44,14 @@ class DoctorStats extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(child: _stat(Icons.people, "2456", "مريض", Colors.green)),
-               // _divider(),
+                Expanded(
+                  child: _stat(
+                    Icons.people,
+                    "${doctor.patients_count ?? 0}",
+                    "مريض",
+                    Colors.green,
+                  ),
+                ),               // _divider(),
                 Expanded(
                   child: GetBuilder<ReviewController>(
 

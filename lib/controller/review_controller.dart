@@ -123,26 +123,30 @@ class ReviewController extends GetxController {
 
     statusRequest = StatusRequest.loading;
     update();
-
+    print("REVIEW ID = $reviewId");
+    print("RATING = $rating");
+    print("COMMENT = ${comment.text}");
     var response = await reviewData.updateReview(
       reviewId: reviewId!,
       comment: comment.text,
+      rating: rating.toString(),
     );
 
+    print(response);
     statusRequest = handlingData(response);
 
     if (statusRequest == StatusRequest.success) {
 
       if (response['success'] == true) {
 
+        // Get.snackbar("نجاح", "تم تعديل التعليق");
+        //
+        // reviewId = null;
+        // rating = 0;
+        // comment.clear();
+        //
+        // update();
         Get.snackbar("نجاح", "تم تعديل التعليق");
-
-        reviewId = null;
-        rating = 0;
-        comment.clear();
-
-        update();
-
         return true;
       }
     }

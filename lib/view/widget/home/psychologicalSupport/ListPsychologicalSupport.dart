@@ -50,9 +50,9 @@ class ListMPsychologicalSupport extends StatelessWidget {
             icon: Icons.psychology_alt_outlined,
           )
               : SizedBox(
-            height: 175.h,
+            height: 320.h,
             child: ListView.builder(
-              scrollDirection: Axis.horizontal,
+              scrollDirection: Axis.vertical,
               physics: const BouncingScrollPhysics(),
               itemCount: controller.data.length,
               itemBuilder: (context, index) {

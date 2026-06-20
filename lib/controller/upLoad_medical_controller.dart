@@ -45,29 +45,7 @@ class MedicalTestController extends GetxController {
       return '${(bytes / (1024 * 1024)).toStringAsFixed(1)} MB';
     }
   }
-  // Future<void> chooseFile() async {
-  //   FilePickerResult? result = await FilePicker.pickFiles(
-  //     type: FileType.custom,
-  //     allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx'],
-  //   );
-  //
-  //   if (result != null && result.files.single.path != null) {
-  //     file = File(result.files.single.path!);
-  //     fileName = result.files.single.name;
-  //     // --- محاكاة التحميل ---
-  //     uploadProgress = 0;
-  //     update();
-  //
-  //     // أنيميشن بسيط لجعل الشريط يزحف لـ 100%
-  //     for (int i = 0; i <= 10; i++) {
-  //       await Future.delayed(const Duration(milliseconds: 200));
-  //       uploadProgress = i / 10; // تزداد من 0.1 إلى 1.0
-  //       update();
-  //     }
-  //   }
-  //
-  //   update();
-  // }
+
 
   final ImagePicker _picker = ImagePicker();
   Future<void> takePhoto() async {
@@ -110,7 +88,6 @@ class MedicalTestController extends GetxController {
 
     if (result != null) {
       for (var pickedFile in result.files) {
-
         selectedFiles.add(pickedFile);
 
         int currentIndex = selectedFiles.length - 1;
@@ -121,32 +98,6 @@ class MedicalTestController extends GetxController {
       update();
     }
   }
-  // Future<void> chooseFile() async {
-  //   // استخدام FilePicker لاختيار ملف واحد أو أكثر
-  //   FilePickerResult? result = await FilePicker.pickFiles(
-  //     type: FileType.custom,
-  //     allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx'],
-  //     allowMultiple: true, // تفعيل اختيار أكثر من ملف في المرة الواحدة
-  //   );
-  //
-  //   if (result != null) {
-  //     for (var pickedFile in result.files) {
-  //       if (pickedFile.path != null) {
-  //         File newFile = File(pickedFile.path!);
-  //
-  //         // إضافة الملف للقائمة بدلاً من استبداله
-  //         selectedFiles.add(newFile);
-  //
-  //         // الحصول على مكان الملف الحالي في القائمة للتحكم بنسبة تحميله
-  //         int currentIndex = selectedFiles.length - 1;
-  //
-  //         // بدء محاكاة التحميل لهذا الملف تحديداً
-  //         _startIndividualUploadSimulation(currentIndex);
-  //       }
-  //     }
-  //     update(); // تحديث الواجهة لإظهار الملفات الجديدة فوراً
-  //   }
-  // }
 
   // دالة منفصلة لإدارة أنيميشن التحميل لكل ملف على حدة
   void _startIndividualUploadSimulation(int index) async {
@@ -215,7 +166,25 @@ class MedicalTestController extends GetxController {
 
         if (statusRequest == StatusRequest.success) {
           if (response['status'] == true) {
-            Get.snackbar("نجاح", "تم رفع التحليل");
+            Get.snackbar(
+              "تم بنجاح",
+              "تم رفع التحليل الطبي بنجاح",
+              snackPosition: SnackPosition.TOP,
+              backgroundColor: const Color(0xFF10B981),
+              colorText: Colors.white,
+              borderRadius: 16,
+              margin: const EdgeInsets.all(16),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 14,
+              ),
+              icon: const Icon(
+                Icons.check_circle_rounded,
+                color: Colors.white,
+                size: 28,
+              ),
+              duration: const Duration(seconds: 2),
+            );
             selectedFiles.clear();
             filesProgress.clear();
             testType.clear();

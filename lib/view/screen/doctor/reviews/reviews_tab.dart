@@ -29,8 +29,7 @@ class _ReviewsTabState
   void initState() {
     super.initState();
 
-    controller = Get.put(ReviewController());
-
+    controller = Get.find<ReviewController>();
     /// 🔥 الحل هون
     WidgetsBinding.instance.addPostFrameCallback((_) {
 

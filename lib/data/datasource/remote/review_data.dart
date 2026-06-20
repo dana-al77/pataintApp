@@ -35,11 +35,14 @@ class ReviewData {
   updateReview({
     required String reviewId,
     required String comment,
+    required String rating,
+
   }) async {
     var response = await crud.PostDataWithToken(
       "${AppLink.updateReview}/$reviewId",
       {
         "comment": comment,
+        "rating":rating
       },
     );
 

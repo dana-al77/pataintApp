@@ -155,80 +155,217 @@ class ScheduleDateWidget extends StatelessWidget {
     }
   }
 
+  String formatMonth(String month) {
+    switch (month.split('-')[1]) {
+      case '01':
+        return 'يناير';
+      case '02':
+        return 'فبراير';
+      case '03':
+        return 'مارس';
+      case '04':
+        return 'أبريل';
+      case '05':
+        return 'مايو';
+      case '06':
+        return 'يونيو';
+      case '07':
+        return 'يوليو';
+      case '08':
+        return 'أغسطس';
+      case '09':
+        return 'سبتمبر';
+      case '10':
+        return 'أكتوبر';
+      case '11':
+        return 'نوفمبر';
+      case '12':
+        return 'ديسمبر';
+      default:
+        return month;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<AppointmentController>(
       builder: (controller) {
         if (doctor.schedules == null || doctor.schedules!.isEmpty) {
-          return const Center(child: Text("لا يوجد مواعيد"));
+          return const Center(
+            child: Text("لا يوجد مواعيد"),
+          );
         }
 
+        final months = doctor.schedules!
+            .map((e) => e.date!.substring(0, 7))
+            .toSet()
+            .toList();
+
+        if (controller.selectedMonth == null &&
+            months.isNotEmpty) {
+          controller.selectedMonth = months.first;
+        }
+
+        final filteredSchedules = doctor.schedules!
+            .where((schedule) => schedule.date!
+            .startsWith(controller.selectedMonth!))
+            .toList();
+
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 10,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "اختر اليوم",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+
+              Row(
+                mainAxisAlignment:
+                MainAxisAlignment.spaceBetween,
+                children: [
+
+                  const Text(
+                    "اختر اليوم",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+
+                  Container(
+                    height: 42,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                    ),
+                    decoration: BoxDecoration(
+                     // color: AppColor.secondyColor.withOpacity(0.08),
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        value: controller.selectedMonth,
+                        icon: const Icon(
+                          Icons.expand_more_rounded,
+                        ),
+                        borderRadius: BorderRadius.circular(16),
+                        items: months.map((month) {
+                          return DropdownMenuItem(
+                            value: month,
+                            child: Text(
+                              formatMonth(month),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                                color: AppColor.black
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          if (value != null) {
+                            controller.selectMonth(value);
+                          }
+                        },
+                      ),
+                    ),
+                  )
+                ],
               ),
-              const SizedBox(height: 15),
+
+              const SizedBox(height: 20),
+
               SizedBox(
-                height: 100, // الارتفاع الكلي للمنطقة
+                height: 100,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
-                  itemCount: doctor.schedules!.length,
-                  separatorBuilder: (_, __) => const SizedBox(width: 10),
+                  itemCount: filteredSchedules.length,
+                  separatorBuilder: (_, __) =>
+                  const SizedBox(width: 10),
                   itemBuilder: (context, index) {
-                    final schedule = doctor.schedules![index];
-                    final isSelected = controller.selectedDate == schedule.date;
 
+                    final schedule =
+                    filteredSchedules[index];
 
+                    final isSelected =
+                        controller.selectedDate ==
+                            schedule.date;
 
                     return GestureDetector(
                       onTap: () {
-                        controller.selectDate(doctor.doctorId!, schedule.date!);
+                        controller.selectDate(
+                          doctor.doctorId!,
+                          schedule.date!,
+                        );
                       },
                       child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 300),
-                        width: 50,
-                        height: 80, // 🔹 إضافة ارتفاع ثابت هنا لحل المشكلة
+                        duration: const Duration(
+                          milliseconds: 300,
+                        ),
+                        width: 55,
                         decoration: BoxDecoration(
-                          color: isSelected ? AppColor.secondyColor : AppColor.secondyColor.withOpacity(0.08),
-                          borderRadius: BorderRadius.circular(50),
+                          color: isSelected
+                              ? AppColor.secondyColor
+                              : AppColor.secondyColor
+                              .withOpacity(0.08),
+                          borderRadius:
+                          BorderRadius.circular(50),
                           border: Border.all(
-                            color: isSelected ? AppColor.secondyColor : Colors.grey.withOpacity(0.1),
+                            color: isSelected
+                                ? AppColor.secondyColor
+                                : Colors.grey
+                                .withOpacity(0.1),
                           ),
                         ),
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center, // 🔹 توسيط العناصر عمودياً
+                          mainAxisAlignment:
+                          MainAxisAlignment.center,
                           children: [
+
                             Text(
-                              formatDay(schedule.day ?? ""),
+                              formatDay(
+                                  schedule.day ?? ""),
                               style: TextStyle(
-                                color: isSelected ? Colors.white : Colors.grey[900],
+                                color: isSelected
+                                    ? Colors.white
+                                    : Colors.black87,
                                 fontSize: 13,
-                                fontWeight: FontWeight.w500,
+                                fontWeight:
+                                FontWeight.w500,
                               ),
                             ),
-                            const SizedBox(height: 8), // مسافة ثابتة بين النص والدائرة
+
+                            const SizedBox(height: 8),
+
                             Container(
                               width: 42,
                               height: 42,
-                              decoration: BoxDecoration(
+                              decoration:
+                              BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: AppColor.white,
+                                color: Colors.white,
                                 border: isSelected
                                     ? null
-                                    : Border.all(color: Colors.grey.withOpacity(0.2)),
+                                    : Border.all(
+                                  color: Colors
+                                      .grey
+                                      .withOpacity(
+                                      0.2),
+                                ),
                               ),
-                              alignment: Alignment.center,
+                              alignment:
+                              Alignment.center,
                               child: Text(
-                                extractDayNumber(schedule.date ?? ""),
+                                extractDayNumber(
+                                  schedule.date ?? "",
+                                ),
                                 style: TextStyle(
-                                  color: isSelected ? AppColor.secondyColor : Colors.black87,
+                                  color: isSelected
+                                      ? AppColor
+                                      .secondyColor
+                                      : Colors.black87,
                                   fontSize: 16,
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight:
+                                  FontWeight.bold,
                                 ),
                               ),
                             ),

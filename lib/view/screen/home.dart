@@ -29,32 +29,11 @@ class Home extends StatelessWidget {
       body: GetBuilder<HomeControllerImp>(
         builder: (controller) => ListView(
           children:  [
-            // Padding(
-            //   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            //   child: CustomSearchField(
-            //     controller: controller.searchController,
-            //     hintText: "ابحث عن طبيب، نصيحة...",
-            //     isSearching: controller.isSearch,
-            //     onClear: controller.clearSearch,
-            //     onChanged: (val) {
-            //       controller.checkSearch(val);
-            //       controller.searchData();
-            //     },
-            //   ),
-            // ),
 
             DoctorConsultationCard(),
             SectionTitle(title: "الخدمات المتاحة"),
             ListServicesHome(),
-            // Padding(
-            //   padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-            //   child: Text(
-            //     "الأطباء",
-            //     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            //   ),
-            // ),
-            //
-            // const ListDoctorsHome(),
+
             SizedBox(height: 10,),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.w), // إضافة حواف جانبية متناسقة
@@ -90,18 +69,7 @@ class Home extends StatelessWidget {
                 ],
               ),
             ),
-            // 👇 هون التعديل المهم
-            // controller.isSearch
-            //     ? ListView.builder(
-            //   itemCount: controller.searchList.length,
-            //   shrinkWrap: true,
-            //   physics: const NeverScrollableScrollPhysics(),
-            //   itemBuilder: (context, index) {
-            //     final tip = controller.searchList[index];
-            //    // return MedicalTipCard(tip: tip);
-            //   },
-            // )
-                //:
+
             ListDoctorsHome(limit: 3),
             SectionTitle(title: "النصائح الطبية"),
             ListMedicalTipsHome(),

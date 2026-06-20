@@ -11,6 +11,8 @@ class DoctorModel {
   String? bio;
   double? price;
   String? image;
+  int? patients_count;
+  int? average_rating;
   List<ScheduleModel>? schedules;
 
   DoctorModel({
@@ -24,6 +26,8 @@ class DoctorModel {
     this.price,
     this.image,
     this.schedules,
+    this.patients_count,
+    this.average_rating,
   });
 
   DoctorModel.fromJson(Map<String, dynamic> json) {
@@ -37,7 +41,8 @@ class DoctorModel {
     bio = json['bio'];
     price = json['price'] != null ? json['price'].toDouble() : null;
     image = json['image'];
-
+    patients_count=json['patients_count'];
+    average_rating=json['average_rating'];
     if (json['schedules'] != null) {
       schedules = <ScheduleModel>[];
       json['schedules'].forEach((v) {

@@ -39,7 +39,7 @@ class AppointmentController extends GetxController {
   /// =============================
   int? selectedIndex;
   String? selectedDate;
-
+  String? selectedMonth;
   String paymentStatusText(String status) {
     switch (status) {
       case "A":
@@ -144,7 +144,12 @@ class AppointmentController extends GetxController {
     selectedIndex = null;
     getSlots(doctorId, date);
   }
-
+  void selectMonth(String month) {
+    selectedMonth = month;
+    selectedDate = null;
+    selectedIndex = null;
+    update();
+  }
   /// =============================
   /// 🔹 Select Time
   /// =============================

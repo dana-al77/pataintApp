@@ -75,6 +75,7 @@ class HandlingDataRequest extends StatelessWidget {
 
       case StatusRequest.serverfailure:
       case StatusRequest.failure:
+      case StatusRequest.serverExption:
         return _buildState(
            icon: Icons.cloud_off,
           // title: "تعذر تحميل البيانات",
@@ -115,6 +116,112 @@ class HandlingDataRequest extends StatelessWidget {
               icon: Icons.refresh,
               onPressed: onRetry,
             )
+          ]
+        ],
+      ),
+    );
+  }
+}
+class HandlingDataModern extends StatelessWidget {
+  final StatusRequest statusRequest;
+  final Widget widget;
+  final VoidCallback? onRetry;
+
+  const HandlingDataModern({
+    super.key,
+    required this.statusRequest,
+    required this.widget,
+    this.onRetry,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    switch (statusRequest) {
+
+    /// ✅ Loading من الكلاس الأول
+      case StatusRequest.loading:
+        return Center(
+          child: Lottie.asset(
+            AppImageAsset.loading,
+            width: 250,
+            height: 250,
+            repeat: true,
+          ),
+        );
+
+    /// ✅ Offline من الكلاس الثاني
+      case StatusRequest.offlinefailure:
+        return _buildState(
+          icon: Icons.wifi_off_rounded,
+          onRetry: onRetry,
+        );
+
+    /// ✅ Server Failure
+      case StatusRequest.serverfailure:
+      case StatusRequest.serverExption:
+      case StatusRequest.failure:
+        return _buildState(
+          icon: Icons.cloud_off_rounded,
+          onRetry: onRetry,
+        );
+
+      default:
+        return widget;
+    }
+  }
+
+  Widget _buildState({
+    required IconData icon,
+    VoidCallback? onRetry,
+  }) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+
+          Container(
+            width: 100,
+            height: 100,
+            decoration: BoxDecoration(
+              color: Colors.grey.withOpacity(0.08),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              icon,
+              size: 50,
+              color: Colors.grey.shade400,
+            ),
+          ),
+
+          const SizedBox(height: 20),
+
+          Text(
+            "تعذر تحميل البيانات",
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: Colors.grey.shade700,
+            ),
+          ),
+
+          const SizedBox(height: 8),
+
+          Text(
+            "يرجى المحاولة مرة أخرى",
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.grey.shade500,
+            ),
+          ),
+
+          if (onRetry != null) ...[
+            const SizedBox(height: 24),
+
+            AppButton(
+              text: "إعادة المحاولة",
+              icon: Icons.refresh,
+              onPressed: onRetry,
+            ),
           ]
         ],
       ),
