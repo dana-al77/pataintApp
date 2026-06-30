@@ -26,126 +26,68 @@ class MedicalQrController extends GetxController {
   final GlobalKey qrKey = GlobalKey();
   String? errorMessage;
   getMedicalQr() async {
-
     statusRequest = StatusRequest.loading;
     update();
 
     var response = await medicalQrData.getMedicalQr();
 
+
     statusRequest = handlingData(response);
 
     if (statusRequest == StatusRequest.success) {
-
       if (response['success'] == true) {
-
         medicalQrModel = MedicalQrModel.fromJson(response);
-
-      } else if (response['status'] == 404) {
-
-        errorMessage = response['error'];
-
-        Get.defaultDialog(
-          title: "تنبيه",
-          middleText: response['error'] ?? "لا يوجد سجل طبي لهذا المريض",
-          textConfirm: "حسناً",
-          onConfirm: () {
-            Get.back();
-            Get.back(); // إذا بدك ترجع للصفحة السابقة
-          },
-        );
-
-        statusRequest = StatusRequest.none;
-
-      } else {
-
+      }
+      else if (response['status'] == 404) {
+        statusRequest = StatusRequest.noData;
+      }
+      else {
         statusRequest = StatusRequest.failure;
       }
     }
 
     update();
   }
-  // saveQrToGallery(String imageUrl) async {
+  // getMedicalQr() async {
   //
-  //   /// REQUEST PERMISSION
-  //   var permission = await Permission.storage.request();
+  //   statusRequest = StatusRequest.loading;
+  //   update();
   //
-  //   if (!permission.isGranted) {
+  //   var response = await medicalQrData.getMedicalQr();
   //
-  //     Get.snackbar(
-  //       "Permission Denied",
-  //       "Storage permission is required",
-  //     );
+  //   statusRequest = handlingData(response);
   //
-  //     return;
-  //   }
+  //   if (statusRequest == StatusRequest.success) {
   //
-  //   try {
+  //     if (response['success'] == true) {
   //
-  //     /// DOWNLOAD IMAGE
-  //     final response = await http.get(Uri.parse(imageUrl));
+  //       medicalQrModel = MedicalQrModel.fromJson(response);
   //
-  //     Uint8List bytes = response.bodyBytes;
+  //     } else if (response['status'] == 404) {
   //
-  //     /// SAVE TO GALLERY
-  //     final result = await ImageGallerySaver.saveImage(
-  //       bytes,
-  //       quality: 100,
-  //       name: "medical_qr",
-  //     );
+  //       errorMessage = response['error'];
   //
-  //     if (result['isSuccess'] == true) {
-  //
-  //       Get.snackbar(
-  //         "Success",
-  //         "QR saved to gallery",
+  //       Get.defaultDialog(
+  //         title: "تنبيه",
+  //         middleText: response['error'] ?? "لا يوجد سجل طبي لهذا المريض",
+  //         textConfirm: "حسناً",
+  //         onConfirm: () {
+  //           Get.back();
+  //           Get.back(); // إذا بدك ترجع للصفحة السابقة
+  //         },
   //       );
+  //
+  //       statusRequest = StatusRequest.none;
   //
   //     } else {
   //
-  //       Get.snackbar(
-  //         "Error",
-  //         "Failed to save QR",
-  //       );
+  //       statusRequest = StatusRequest.failure;
   //     }
-  //
-  //   } catch (e) {
-  //
-  //     Get.snackbar(
-  //       "Error",
-  //       e.toString(),
-  //     );
   //   }
+  //
+  //   update();
   // }
-  // saveQrToGallery(String imageUrl) async {
-  //   print("QR URL: $imageUrl"); // 👈 هون
-  //   try {
-  //
-  //     /// DOWNLOAD IMAGE
-  //     final response = await http.get(
-  //       Uri.parse(imageUrl),
-  //     );
-  //
-  //
-  //
-  //     /// SAVE TO GALLERY
-  //     await VisionGallerySaver.saveImage(
-  //       response.bodyBytes,
-  //       name: "medical_qr",
-  //     );
-  //
-  //     Get.snackbar(
-  //       "Success",
-  //       "QR saved to gallery",
-  //     );
-  //
-  //   } catch (e) {
-  //
-  //     Get.snackbar(
-  //       "Error",
-  //       e.toString(),
-  //     );
-  //   }
-  // }
+
   Future<void> saveQrAsImage() async {
     try {
       RenderRepaintBoundary boundary =

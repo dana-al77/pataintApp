@@ -5,5 +5,6 @@ enum StatusRequest{
   failure,
   serverfailure,
   offlinefailure,
-  serverExption
+  serverExption,
+  noData
 }

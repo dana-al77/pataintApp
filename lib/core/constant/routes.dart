@@ -26,6 +26,7 @@ class AppRoute {
 
   static const String medicalQR = "/medicalQr";
   static const String tabQR = "/tabQr";
+  static const String consultant = "/consultant";
 
 
 }

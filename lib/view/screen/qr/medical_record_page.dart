@@ -32,21 +32,18 @@ class MedicalQrView extends StatelessWidget {
       body: SafeArea(
         child: GetBuilder<MedicalQrController>(
           builder: (controller) {
-            return
-                HandlingDataRequest(
-                  statusRequest: controller.statusRequest,
-                  onRetry: () {
-                    controller.getMedicalQr();
-                  },
+      return HandlingDataModern( // استخدمنا المودرن
+        statusRequest: controller.statusRequest,
+        onRetry: () => controller.getMedicalQr(),
+        widget: Builder(
+          builder: (context) {
+            // هنا الحماية: لا تصل للمودل إلا إذا كان موجوداً
+            if (controller.medicalQrModel == null || controller.medicalQrModel!.data == null) {
+              return const Center(child: Text("لا توجد بيانات"));
+            }
 
-              widget: Builder(
-                builder: (context) {
-
-                  final record =
-                  controller.medicalQrModel!.data!.medicalRecord!;
-
-                  final qrUrl =
-                  controller.medicalQrModel!.data!.qrCodeUrl!;
+            final record = controller.medicalQrModel!.data!.medicalRecord!;
+            final qrUrl = controller.medicalQrModel!.data!.qrCodeUrl!;
 
                   return SingleChildScrollView(
                     padding: const EdgeInsets.all(16),

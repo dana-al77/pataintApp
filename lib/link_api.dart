@@ -1,7 +1,7 @@
 class AppLink {
   // static const String server = "https://05ee-185-107-80-121.ngrok-free.app/";
-  static const String server = "https://968f-185-184-195-135.ngrok-free.app/";
-  // static const String server = "http://192.168.1.109:8000/";
+  static const String server = "https://saloon-uncaring-bankable.ngrok-free.dev/";
+  // static const String server = "https://midical.kfo-card.com/";
 
   static const String test = "$server";
   /////// ================ Auth ================================= ///
@@ -55,4 +55,13 @@ class AppLink {
 
   //// QR
   static const String getMedicalQr = "${server}api/medical-record/qr";
+
+  static const String consultants = "${server}api/consultants";
+
+  static const String createConsultationPayment = "${server}api/consultation-payment/create";
+
+  static const String consultationPaymentStatus = "${server}api/consultation-payment/status";
+
+  static const String consultationPaymentCancel = "${server}api/consultation-payment/cancel";
+  static const String whatsapp = "${server}api/consultation-payment/whatsapp";
 }

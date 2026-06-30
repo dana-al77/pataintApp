@@ -164,13 +164,65 @@ class HandlingDataModern extends StatelessWidget {
           icon: Icons.cloud_off_rounded,
           onRetry: onRetry,
         );
-
+      case StatusRequest.noData:
+        return _buildState(
+          icon: Icons.assignment_late_outlined,
+          title: "لا يوجد سجل طبي", // نص مخصص
+          subTitle: "عذراً، لم يتم العثور على سجل طبي للمريض", // نص مخصص
+        );
       default:
         return widget;
     }
   }
-
   Widget _buildState({
+    required IconData icon,
+    VoidCallback? onRetry,
+    String title = "اباال", // قيمة افتراضية
+    String subTitle = "رتلابارلاتى", // قيمة افتراضية
+  }) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: 100,
+            height: 100,
+            decoration: BoxDecoration(
+              color: Colors.grey.withOpacity(0.08),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, size: 50, color:AppColor.secondyColor),
+          ),
+          const SizedBox(height: 20),
+          Text(
+            title, // تم التعديل هنا لاستخدام المتغير
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: Colors.grey.shade700,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            subTitle, // تم التعديل هنا لاستخدام المتغير
+            style: TextStyle(
+              fontSize: 15,
+              color: Colors.grey.shade500,
+            ),
+          ),
+          if (onRetry != null) ...[
+            const SizedBox(height: 24),
+            AppButton(
+              text: "إعادة المحاولة",
+              icon: Icons.refresh,
+              onPressed: onRetry,
+            ),
+          ]
+        ],
+      ),
+    );
+  }
+/*  Widget _buildState({
     required IconData icon,
     VoidCallback? onRetry,
   }) {
@@ -226,5 +278,5 @@ class HandlingDataModern extends StatelessWidget {
         ],
       ),
     );
-  }
+  }*/
 }

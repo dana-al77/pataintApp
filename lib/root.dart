@@ -9,6 +9,7 @@ import 'package:patientapp/view/screen/auth/login.dart';
 import 'package:patientapp/view/screen/auth/sign_up.dart';
 import 'package:patientapp/view/screen/auth/verfiy_code_sign_up.dart';
 import 'package:patientapp/view/screen/chat/chat_view.dart';
+import 'package:patientapp/view/screen/consultant/consultant_view.dart';
 import 'package:patientapp/view/screen/home.dart';
 import 'package:patientapp/view/screen/homescreen.dart';
 import 'package:patientapp/view/screen/qr/FullMedicalRecordView.dart';
@@ -61,9 +62,15 @@ List<GetPage<dynamic>>? routes = [
   GetPage(name: AppRoute.getProfile, page: () =>  ProfilePage()),
   GetPage(name: AppRoute.EditProfile, page: () =>  EditProfileButton()),
 
+  /////////// consultant
+  GetPage(name: AppRoute.consultant, page: () =>  ConsultantsView()),
 
 
+
+////////// test
   GetPage(name: AppRoute.upLoadMedical, page: () =>  UploadMedical()),
+
+  ////////// QR
   GetPage(name: AppRoute.medicalQR, page: () =>  MedicalQrView()),
   GetPage(name: AppRoute.tabQR, page: () =>  QrHomeView()),
 

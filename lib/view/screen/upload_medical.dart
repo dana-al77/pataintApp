@@ -27,8 +27,11 @@ class UploadMedical extends StatelessWidget {
 
       backgroundColor: AppColor.backgroundColor,
       body: GetBuilder<MedicalTestController>(
-        builder: (controller) => handlingDataRequest(
+        builder: (controller) => HandlingDataModern( // تأكد من استخدام الاسم الصحيح للكلاس
           statusRequest: controller.statusRequest,
+          onRetry: () {
+            controller.uploadTest();
+          },
           widget: Form(
             key: controller.formstate,
             child: ListView(

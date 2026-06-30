@@ -136,11 +136,16 @@ class MedicalTestController extends GetxController {
         return Icons.insert_drive_file;
     }
   }
-  /// 🚀 رفع التحليل
+  /// 🚀 رفع التحليل (النسخة النهائية المتوافقة)
   uploadTest() async {
-    var formData = formstate.currentState;
+    // 1️⃣ حماية: التأكد أن الفورم مرتبط بالكنترولر
+    if (formstate.currentState == null) {
+      print("===== ❌ خطأ: الـ formstate غير مرتبط بالواجهة");
+      return;
+    }
 
-    if (formData!.validate()) {
+    // 2️⃣ التحقق من صحة البيانات
+    if (formstate.currentState!.validate()) {
       if (selectedFiles.isEmpty) {
         Get.snackbar("تنبيه", "اختر ملف أولاً");
         return;
@@ -148,65 +153,149 @@ class MedicalTestController extends GetxController {
 
       try {
         statusRequest = StatusRequest.loading;
-        update();
+        update(); // عرض اللودر
 
-        var response = await medicalTestData.postData(
+        // 3️⃣ الاتصال بالسيرفر
+        var responseEither = await medicalTestData.postData(
           testType: testType.text,
           notes: notes.text,
-         // files: selectedFiles,
           files: selectedFiles
               .where((e) => e.path != null)
               .map((e) => File(e.path!))
               .toList(),
         );
 
-        print("===== Upload Test Response: $response");
+        // 4️⃣ معالجة النتيجة باستخدام fold
+        responseEither.fold(
+              (statusRequestError) {
+            // الجانب الأيسر (Left): خطأ تقني (اتصال، سيرفر، إكسبشن)
+            print("===== ❌ خطأ تقني: $statusRequestError");
+            statusRequest = statusRequestError;
+          },
+              (responseMap) {
+            // الجانب الأيمن (Right): تم الاتصال بالسيرفر بنجاح، لنفحص البيانات (Map)
+            print("===== ✅ رد السيرفر: $responseMap");
 
-        statusRequest = handlingData(response);
+            if (responseMap['status'] == false) {
+              // حالة خاصة: السيرفر رد بـ false (مثلاً: لا يوجد سجل طبي)
+              print("===== 2. اكتشاف حالة: لا يوجد سجل طبي (noData)");
+              statusRequest = StatusRequest.noData;
+            } else {
+              // حالة النجاح الحقيقي
+              print("===== 3. النجاح التام");
+              statusRequest = StatusRequest.success;
 
-        if (statusRequest == StatusRequest.success) {
-          if (response['status'] == true) {
-            Get.snackbar(
-              "تم بنجاح",
-              "تم رفع التحليل الطبي بنجاح",
-              snackPosition: SnackPosition.TOP,
-              backgroundColor: const Color(0xFF10B981),
-              colorText: Colors.white,
-              borderRadius: 16,
-              margin: const EdgeInsets.all(16),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 20,
-                vertical: 14,
-              ),
-              icon: const Icon(
-                Icons.check_circle_rounded,
-                color: Colors.white,
-                size: 28,
-              ),
-              duration: const Duration(seconds: 2),
-            );
-            selectedFiles.clear();
-            filesProgress.clear();
-            testType.clear();
-            notes.clear();
+                        Get.snackbar(
+                          "تم بنجاح",
+                          "تم رفع التحليل الطبي بنجاح",
+                          snackPosition: SnackPosition.TOP,
+                          backgroundColor: const Color(0xFF10B981),
+                          colorText: Colors.white,
+                          borderRadius: 16,
+                          margin: const EdgeInsets.all(16),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 14,
+                          ),
+                          icon: const Icon(
+                            Icons.check_circle_rounded,
+                            color: Colors.white,
+                            size: 28,
+                          ),
+                          duration: const Duration(seconds: 2),
+                        );
+                        selectedFiles.clear();
+                        filesProgress.clear();
+                        testType.clear();
+                        notes.clear();
 
-          } else {
-            Get.defaultDialog(
-              title: "Error",
-              middleText: response['message'] ?? "Upload failed",
-            );
-            statusRequest = StatusRequest.failure;
-          }
-        }
+              // تصفير البيانات
+              selectedFiles.clear();
+              filesProgress.clear();
+              testType.clear();
+              notes.clear();
+            }
+          },
+        );
+
       } catch (e) {
-        // هنا سيطبع لك أي خطأ يحدث حتى لو السيرفر مطفأ تماماً
-        print("❌ حدث خطأ غير متوقع: $e");
+        // حماية إضافية لأي خطأ غير متوقع
+        print("❌ 5. حدث خطأ غير متوقع: $e");
         statusRequest = StatusRequest.serverfailure;
       }
 
-      update();
+      update(); // تحديث الواجهة لعرض الحالة النهائية
     }
-  }
+  }  // uploadTest() async {
+  //   var formData = formstate.currentState;
+  //
+  //   if (formData!.validate()) {
+  //     if (selectedFiles.isEmpty) {
+  //       Get.snackbar("تنبيه", "اختر ملف أولاً");
+  //       return;
+  //     }
+  //
+  //     try {
+  //       statusRequest = StatusRequest.loading;
+  //       update();
+  //
+  //       var response = await medicalTestData.postData(
+  //         testType: testType.text,
+  //         notes: notes.text,
+  //        // files: selectedFiles,
+  //         files: selectedFiles
+  //             .where((e) => e.path != null)
+  //             .map((e) => File(e.path!))
+  //             .toList(),
+  //       );
+  //
+  //       print("===== Upload Test Response: $response");
+  //
+  //       statusRequest = handlingData(response);
+  //
+  //       if (statusRequest == StatusRequest.success) {
+  //         if (response['status'] == true) {
+  //           Get.snackbar(
+  //             "تم بنجاح",
+  //             "تم رفع التحليل الطبي بنجاح",
+  //             snackPosition: SnackPosition.TOP,
+  //             backgroundColor: const Color(0xFF10B981),
+  //             colorText: Colors.white,
+  //             borderRadius: 16,
+  //             margin: const EdgeInsets.all(16),
+  //             padding: const EdgeInsets.symmetric(
+  //               horizontal: 20,
+  //               vertical: 14,
+  //             ),
+  //             icon: const Icon(
+  //               Icons.check_circle_rounded,
+  //               color: Colors.white,
+  //               size: 28,
+  //             ),
+  //             duration: const Duration(seconds: 2),
+  //           );
+  //           selectedFiles.clear();
+  //           filesProgress.clear();
+  //           testType.clear();
+  //           notes.clear();
+  //
+  //         } else {
+  //           Get.defaultDialog(
+  //             title: "Error",
+  //             middleText: response['message'] ?? "Upload failed",
+  //           );
+  //           statusRequest = StatusRequest.failure;
+  //         }
+  //       }
+  //     } catch (e) {
+  //       // هنا سيطبع لك أي خطأ يحدث حتى لو السيرفر مطفأ تماماً
+  //       print("❌ حدث خطأ غير متوقع: $e");
+  //       statusRequest = StatusRequest.serverfailure;
+  //     }
+  //
+  //     update();
+  //   }
+  // }
 
 
   @override

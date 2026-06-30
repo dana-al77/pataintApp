@@ -29,7 +29,9 @@ class servicesControllerImp extends servicesController {
     Get.toNamed(AppRoute.medicalQR);
   }
 
-
+   goToConsultant(){
+     Get.toNamed(AppRoute.consultant);
+   }
 
 
 

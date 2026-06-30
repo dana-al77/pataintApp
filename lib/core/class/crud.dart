@@ -147,6 +147,64 @@ catch(e){
   }
 
 
+  // Future<Either<StatusRequest, Map>> postDataUpLoad(
+  //     String linkUrl,
+  //     Map data,
+  //     List<File> imageFiles,
+  //     String imageKey,
+  //     ) async {
+  //   try {
+  //
+  //     String? token =
+  //     myServices.sharedPreferences.getString("token");
+  //
+  //     var request =
+  //     http.MultipartRequest("POST", Uri.parse(linkUrl));
+  //
+  //     // fields
+  //     data.forEach((key, value) {
+  //       request.fields[key] = value.toString();
+  //     });
+  //
+  //     // files
+  //     for (var file in imageFiles) {
+  //       request.files.add(
+  //         await http.MultipartFile.fromPath(
+  //           imageKey,
+  //           file.path,
+  //         ),
+  //       );
+  //     }
+  //
+  //     request.headers.addAll({
+  //       "Accept": "application/json",
+  //       "Authorization": "Bearer $token",
+  //     });
+  //
+  //     var streamed = await request.send();
+  //
+  //     var response =
+  //     await http.Response.fromStream(streamed);
+  //
+  //     print(response.body);
+  //
+  //     if (streamed.statusCode >= 200 &&
+  //         streamed.statusCode < 300) {
+  //
+  //       return Right(jsonDecode(response.body));
+  //
+  //     } else {
+  //
+  //       return Left(StatusRequest.serverfailure);
+  //     }
+  //
+  //   } catch (e) {
+  //
+  //     print(e);
+  //
+  //     return Left(StatusRequest.serverExption);
+  //   }
+  // }
   Future<Either<StatusRequest, Map>> postDataUpLoad(
       String linkUrl,
       Map data,
@@ -154,19 +212,16 @@ catch(e){
       String imageKey,
       ) async {
     try {
+      String? token = myServices.sharedPreferences.getString("token");
 
-      String? token =
-      myServices.sharedPreferences.getString("token");
+      var request = http.MultipartRequest("POST", Uri.parse(linkUrl));
 
-      var request =
-      http.MultipartRequest("POST", Uri.parse(linkUrl));
-
-      // fields
+      // إضافة البيانات (Fields)
       data.forEach((key, value) {
         request.fields[key] = value.toString();
       });
 
-      // files
+      // إضافة الملفات
       for (var file in imageFiles) {
         request.files.add(
           await http.MultipartFile.fromPath(
@@ -176,32 +231,37 @@ catch(e){
         );
       }
 
+      // إضافة الهيدرز
       request.headers.addAll({
         "Accept": "application/json",
         "Authorization": "Bearer $token",
       });
 
+      // إرسال الطلب
       var streamed = await request.send();
+      var response = await http.Response.fromStream(streamed);
 
-      var response =
-      await http.Response.fromStream(streamed);
+      print("===== رد السيرفر الخام: ${response.body}");
 
-      print(response.body);
-
-      if (streamed.statusCode >= 200 &&
-          streamed.statusCode < 300) {
-
+      // --- التعديل الجوهري هنا ---
+      // نقبل الرد في حالة النجاح (200) أو في حالة وجود خطأ منطقي (422 أو 400)
+      // لأننا نريد الوصول للـ JSON في كلا الحالتين
+      if (streamed.statusCode >= 200 && streamed.statusCode < 300) {
         return Right(jsonDecode(response.body));
-
+      } else if (streamed.statusCode == 422 || streamed.statusCode == 400) {
+        try {
+          // هنا نقوم بفك تشفير رسالة الخطأ من السيرفر وإرجاعها للكنترولر
+          return Right(jsonDecode(response.body));
+        } catch (e) {
+          // إذا فشل فك التشفير، نرجع خطأ السيرفر
+          return Left(StatusRequest.serverfailure);
+        }
       } else {
-
+        // أي خطأ آخر (مثل 500) يعتبر فشل تقني
         return Left(StatusRequest.serverfailure);
       }
-
     } catch (e) {
-
-      print(e);
-
+      print("❌ خطأ في الـ Crud: $e");
       return Left(StatusRequest.serverExption);
     }
   }
